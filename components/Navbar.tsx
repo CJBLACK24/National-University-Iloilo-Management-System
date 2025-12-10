@@ -1,27 +1,20 @@
+import Link from "next/link";
 import Image from "next/image";
-import MobileMenu from "./MobileMenu";
+import { MessageSquare, Megaphone, Search } from "lucide-react";
 
 const Navbar = () => {
   const role = "admin"; // Mock role
   return (
-    <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-md sticky top-0 z-40">
-      {/* MOBILE MENU & SEARCH */}
+    <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-md sticky top-0 z-40 rounded-xl">
+      {/* SEARCH BAR */}
       <div className="flex items-center gap-4">
-        <MobileMenu />
-
         {/* SEARCH BAR */}
-        <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-zinc-700 px-2 bg-zinc-900">
-          <Image
-            src="/search.png"
-            alt=""
-            width={14}
-            height={14}
-            className="invert opacity-50"
-          />
+        <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-zinc-700 px-2 bg-zinc-900 py-1">
+          <Search className="w-4 h-4 text-zinc-500" />
           <input
             type="text"
             placeholder="Search..."
-            className="w-[200px] p-2 bg-transparent outline-none text-slate-200 placeholder:text-zinc-500"
+            className="w-[200px] p-1 bg-transparent outline-none text-slate-200 placeholder:text-zinc-500 font-medium"
           />
         </div>
       </div>
@@ -29,22 +22,10 @@ const Navbar = () => {
       {/* ICONS AND USER */}
       <div className="flex items-center gap-6 justify-end w-full md:w-auto">
         <div className="bg-zinc-800 rounded-full w-7 h-7 flex items-center justify-center cursor-pointer hover:bg-zinc-700 transition-colors">
-          <Image
-            src="/message.png"
-            alt=""
-            width={20}
-            height={20}
-            className="invert brightness-0"
-          />
+          <MessageSquare className="w-4 h-4 text-white" />
         </div>
         <div className="bg-zinc-800 rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative hover:bg-zinc-700 transition-colors">
-          <Image
-            src="/announcement.png"
-            alt=""
-            width={20}
-            height={20}
-            className="invert brightness-0"
-          />
+          <Megaphone className="w-4 h-4 text-white" />
           <div className="absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-purple-600 text-white rounded-full text-xs box-content border-2 border-black">
             1
           </div>
