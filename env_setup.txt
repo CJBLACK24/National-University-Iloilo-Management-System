@@ -1,0 +1,12 @@
+BETTER_AUTH_SECRET="eihF8OeDXxroisNnv93piDp/2oRcZMmjPdpGPgbRaFM="
+
+# Connect to Supabase via connection pooling
+DATABASE_URL="postgresql://postgres.lszyishfdpafriogqthv:pTFFlIIWtHTW8sTe@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+# Direct connection to the database. Used for migrations
+DIRECT_URL="postgresql://postgres.lszyishfdpafriogqthv:pTFFlIIWtHTW8sTe@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres"
+
+NEXT_PUBLIC_SUPABASE_URL="https://lszyishfdpafriogqthv.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY="sb_publishable_ctWkbaSOdgjFLH3ut074UA_2zF_49qD"
+ARCJET_KEY="ajkey_01kc1pzskgfahtkyr6c6mkcn29" 
+
+CLOUDINARY_URL="cloudinary://531669639856969:531669639856969@cjblackdev"
