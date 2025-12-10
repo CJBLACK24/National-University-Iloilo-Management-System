@@ -5,17 +5,17 @@ import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
 
-const AdminPage = ({
-  searchParams,
-}: {
-  searchParams: { [keys: string]: string | undefined };
+const AdminPage = async (props: {
+  searchParams: Promise<{ [keys: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
+
   return (
-    <div className="p-4 flex gap-4 flex-col md:flex-row">
+    <div className="flex gap-4 flex-col xl:flex-row">
       {/* LEFT */}
-      <div className="w-full lg:w-2/3 flex flex-col gap-8">
+      <div className="w-full xl:w-2/3 flex flex-col gap-4">
         {/* USER CARDS */}
-        <div className="flex gap-4 justify-between flex-wrap">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <UserCard type="admin" />
           <UserCard type="teacher" />
           <UserCard type="student" />
@@ -24,22 +24,22 @@ const AdminPage = ({
         {/* MIDDLE CHARTS */}
         <div className="flex gap-4 flex-col lg:flex-row">
           {/* COUNT CHART */}
-          <div className="w-full lg:w-1/3 h-[450px]">
+          <div className="w-full lg:w-1/3 h-[400px]">
             <CountChartContainer />
           </div>
           {/* ATTENDANCE CHART */}
-          <div className="w-full lg:w-2/3 h-[450px]">
+          <div className="w-full lg:w-2/3 h-[400px]">
             <AttendanceChartContainer />
           </div>
         </div>
         {/* BOTTOM CHART */}
-        <div className="w-full h-[500px]">
+        <div className="w-full h-[400px]">
           <FinanceChart />
         </div>
       </div>
       {/* RIGHT */}
-      <div className="w-full lg:w-1/3 flex flex-col gap-8">
-        <EventCalendarContainer searchParams={searchParams}/>
+      <div className="w-full xl:w-1/3 flex flex-col gap-4">
+        <EventCalendarContainer searchParams={searchParams} />
         <Announcements />
       </div>
     </div>

@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
-import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, GraduationCap, User, UserCheck } from "lucide-react";
 
 const UserCard = async ({
   type,
@@ -13,19 +14,38 @@ const UserCard = async ({
     parent: prisma.parent,
   };
 
+  const iconMap = {
+    admin: UserCheck,
+    teacher: GraduationCap,
+    student: User,
+    parent: Users,
+  };
+
+  const colorMap = {
+    admin: "from-purple-500 to-purple-600",
+    teacher: "from-blue-500 to-blue-600",
+    student: "from-emerald-500 to-emerald-600",
+    parent: "from-orange-500 to-orange-600",
+  };
+
   const data = await modelMap[type].count();
+  const Icon = iconMap[type];
 
   return (
-    <div className="rounded-2xl odd:bg-lamaPurple even:bg-lamaYellow p-4 flex-1 min-w-[130px]">
-      <div className="flex justify-between items-center">
-        <span className="text-[10px] bg-white px-2 py-1 rounded-full text-green-600">
+    <Card className="rounded-xl bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-200">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 pt-4 px-4">
+        <div className={`p-2 rounded-lg bg-gradient-to-br ${colorMap[type]}`}>
+          <Icon className="h-4 w-4 text-white" />
+        </div>
+        <span className="text-[10px] text-zinc-500 uppercase tracking-wider">
           2024/25
         </span>
-        <Image src="/more.png" alt="" width={20} height={20} />
-      </div>
-      <h1 className="text-2xl font-semibold my-4">{data}</h1>
-      <h2 className="capitalize text-sm font-medium text-gray-500">{type}s</h2>
-    </div>
+      </CardHeader>
+      <CardContent className="px-4 pb-4">
+        <div className="text-3xl font-bold text-white mb-1">{data}</div>
+        <p className="text-xs text-zinc-400 capitalize">{type}s</p>
+      </CardContent>
+    </Card>
   );
 };
 

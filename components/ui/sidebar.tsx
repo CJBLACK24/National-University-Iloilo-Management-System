@@ -15,6 +15,7 @@ interface SidebarContextProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   animate: boolean;
+  disableHover: boolean;
 }
 
 const SidebarContext = createContext<SidebarContextProps | undefined>(
@@ -34,11 +35,13 @@ export const SidebarProvider = ({
   open: openProp,
   setOpen: setOpenProp,
   animate = true,
+  disableHover = false,
 }: {
   children: React.ReactNode;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   animate?: boolean;
+  disableHover?: boolean;
 }) => {
   const [openState, setOpenState] = useState(false);
 
@@ -46,7 +49,7 @@ export const SidebarProvider = ({
   const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
 
   return (
-    <SidebarContext.Provider value={{ open, setOpen, animate }}>
+    <SidebarContext.Provider value={{ open, setOpen, animate, disableHover }}>
       {children}
     </SidebarContext.Provider>
   );
@@ -57,14 +60,21 @@ export const Sidebar = ({
   open,
   setOpen,
   animate,
+  disableHover = false,
 }: {
   children: React.ReactNode;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   animate?: boolean;
+  disableHover?: boolean;
 }) => {
   return (
-    <SidebarProvider open={open} setOpen={setOpen} animate={animate}>
+    <SidebarProvider
+      open={open}
+      setOpen={setOpen}
+      animate={animate}
+      disableHover={disableHover}
+    >
       {children}
     </SidebarProvider>
   );
@@ -84,24 +94,31 @@ export const DesktopSidebar = ({
   children,
   ...props
 }: React.ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
+  const { open, setOpen, animate, disableHover } = useSidebar();
+
   return (
-    <>
-      <motion.div
-        className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
-          className
-        )}
-        animate={{
-          width: animate ? (open ? "300px" : "60px") : "300px",
-        }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    </>
+    <motion.div
+      className={cn(
+        "h-full px-3 py-4 hidden md:flex md:flex-col bg-black w-[220px] flex-shrink-0 border-r border-zinc-800",
+        className
+      )}
+      animate={{
+        width: animate && !disableHover ? (open ? "220px" : "56px") : "220px",
+      }}
+      transition={{
+        type: "tween",
+        duration: 0.2,
+        ease: "easeOut",
+      }}
+      style={{
+        willChange: "width",
+      }}
+      onMouseEnter={() => !disableHover && setOpen(true)}
+      onMouseLeave={() => !disableHover && setOpen(false)}
+      {...props}
+    >
+      {children}
+    </motion.div>
   );
 };
 
@@ -115,13 +132,13 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-12 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-black w-full border-b border-zinc-800"
         )}
         {...props}
       >
         <div className="flex justify-end z-20 w-full">
           <IconMenu2
-            className="text-neutral-800 dark:text-neutral-200"
+            className="text-white cursor-pointer"
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -132,16 +149,17 @@ export const MobileSidebar = ({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{
-                duration: 0.3,
-                ease: "easeInOut",
+                type: "tween",
+                duration: 0.25,
+                ease: "easeOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-black p-10 z-[100] flex flex-col justify-between",
                 className
               )}
             >
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                className="absolute right-10 top-10 z-50 text-white cursor-pointer"
                 onClick={() => setOpen(!open)}
               >
                 <IconX />
@@ -155,6 +173,28 @@ export const MobileSidebar = ({
   );
 };
 
+// Tooltip component for collapsed sidebar
+const Tooltip = ({
+  children,
+  content,
+  show,
+}: {
+  children: React.ReactNode;
+  content: string;
+  show: boolean;
+}) => {
+  return (
+    <div className="relative group">
+      {children}
+      {show && (
+        <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-zinc-800 text-white text-xs rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 border border-zinc-700">
+          {content}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const SidebarLink = ({
   link,
   className,
@@ -164,27 +204,40 @@ export const SidebarLink = ({
   className?: string;
   props?: LinkProps;
 }) => {
-  const { open, animate } = useSidebar();
-  return (
-    <Link
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
-        className
-      )}
-      {...props}
-    >
-      {link.icon}
+  const { open, animate, disableHover } = useSidebar();
+  const showTooltip = !open && animate && !disableHover;
 
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+  return (
+    <Tooltip content={link.label} show={showTooltip}>
+      <Link
+        href={link.href}
+        className={cn(
+          "flex items-center justify-start gap-2 group/sidebar py-2 px-2 rounded-lg hover:bg-zinc-900 transition-colors duration-150",
+          className
+        )}
+        {...props}
       >
-        {link.label}
-      </motion.span>
-    </Link>
+        {link.icon}
+        <motion.span
+          animate={{
+            display:
+              animate && !disableHover
+                ? open
+                  ? "inline-block"
+                  : "none"
+                : "inline-block",
+            opacity: animate && !disableHover ? (open ? 1 : 0) : 1,
+          }}
+          transition={{
+            type: "tween",
+            duration: 0.15,
+            ease: "easeOut",
+          }}
+          className="text-zinc-300 text-sm group-hover/sidebar:text-white transition-colors duration-150 whitespace-pre inline-block !p-0 !m-0"
+        >
+          {link.label}
+        </motion.span>
+      </Link>
+    </Tooltip>
   );
 };

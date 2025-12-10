@@ -1,6 +1,7 @@
 import Image from "next/image";
 import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
+import { MoreHorizontal } from "lucide-react";
 
 const EventCalendarContainer = async ({
   searchParams,
@@ -9,11 +10,11 @@ const EventCalendarContainer = async ({
 }) => {
   const { date } = searchParams;
   return (
-    <div className="bg-white p-4 rounded-md">
+    <div className="bg-[#18181b] p-4 rounded-xl border border-zinc-800 shadow-sm">
       <EventCalendar />
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold my-4">Events</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
+        <h1 className="text-xl font-semibold my-4 text-white">Events</h1>
+        <MoreHorizontal className="text-zinc-400 w-5 h-5 cursor-pointer" />
       </div>
       <div className="flex flex-col gap-4">
         <EventList dateParam={date} />

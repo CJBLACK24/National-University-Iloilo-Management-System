@@ -1,6 +1,6 @@
-import Image from "next/image";
 import AttendanceChart from "./AttendanceChart";
 import prisma from "@/lib/prisma";
+import { MoreHorizontal } from "lucide-react";
 
 const AttendanceChartContainer = async () => {
   const today = new Date();
@@ -8,7 +8,6 @@ const AttendanceChartContainer = async () => {
   const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
   const lastMonday = new Date(today);
-
   lastMonday.setDate(today.getDate() - daysSinceMonday);
 
   const resData = await prisma.attendance.findMany({
@@ -22,8 +21,6 @@ const AttendanceChartContainer = async () => {
       present: true,
     },
   });
-
-  // console.log(data)
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
@@ -39,7 +36,7 @@ const AttendanceChartContainer = async () => {
   resData.forEach((item) => {
     const itemDate = new Date(item.date);
     const dayOfWeek = itemDate.getDay();
-    
+
     if (dayOfWeek >= 1 && dayOfWeek <= 5) {
       const dayName = daysOfWeek[dayOfWeek - 1];
 
@@ -58,12 +55,14 @@ const AttendanceChartContainer = async () => {
   }));
 
   return (
-    <div className="bg-white rounded-lg p-4 h-full">
-      <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Attendance</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
+    <div className="bg-zinc-900 rounded-xl p-4 h-full border border-zinc-800 flex flex-col">
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-base font-semibold text-white">Attendance</h1>
+        <MoreHorizontal className="text-zinc-500 w-5 h-5 cursor-pointer hover:text-zinc-300 transition-colors" />
       </div>
-      <AttendanceChart data={data}/>
+      <div className="flex-1 min-h-0">
+        <AttendanceChart data={data} />
+      </div>
     </div>
   );
 };

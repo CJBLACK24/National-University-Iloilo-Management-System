@@ -5,14 +5,14 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Announcement, Class, Prisma } from "@/prisma/generated/prisma/client";
-import Image from "next/image";
+import { Filter, ArrowUpDown } from "lucide-react";
 
-type AnnouncementList = Announcement & { class: Class };
-const AnnouncementListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
+type AnnouncementList = Announcement & { class: Class | null };
+
+const AnnouncementListPage = async (props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
   const role = "admin";
   const currentUserId = "admin";
 
@@ -22,7 +22,7 @@ const AnnouncementListPage = async ({
       accessor: "title",
     },
     {
-      header: "Class",
+      header: "Department",
       accessor: "class",
     },
     {
@@ -43,11 +43,13 @@ const AnnouncementListPage = async ({
   const renderRow = (item: AnnouncementList) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class?.name || "-"}</td>
-      <td className="hidden md:table-cell">
+      <td className="flex items-center gap-4 p-4 text-white font-medium">
+        {item.title}
+      </td>
+      <td className="text-zinc-400">{item.class?.name || "-"}</td>
+      <td className="hidden md:table-cell text-zinc-400">
         {new Intl.DateTimeFormat("en-US").format(item.date)}
       </td>
       <td>
@@ -62,12 +64,11 @@ const AnnouncementListPage = async ({
       </td>
     </tr>
   );
-  const { page, ...queryParams } = searchParams;
 
+  const { page, ...queryParams } = searchParams;
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.AnnouncementWhereInput = {};
 
   if (queryParams) {
@@ -85,7 +86,6 @@ const AnnouncementListPage = async ({
   }
 
   // ROLE CONDITIONS
-
   const roleConditions = {
     teacher: { lessons: { some: { teacherId: currentUserId! } } },
     student: { students: { some: { id: currentUserId! } } },
@@ -112,20 +112,20 @@ const AnnouncementListPage = async ({
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">
+        <h1 className="hidden md:block text-lg font-semibold text-white">
           All Announcements
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <Filter className="w-4 h-4 text-zinc-400" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
             {role === "admin" && (
               <FormContainer table="announcement" type="create" />

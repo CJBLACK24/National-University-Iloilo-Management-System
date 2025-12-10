@@ -5,7 +5,7 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Prisma } from "@/prisma/generated/prisma/client";
-import Image from "next/image";
+import { Filter, ArrowUpDown } from "lucide-react";
 
 type ResultList = {
   id: number;
@@ -43,13 +43,12 @@ type ResultList = {
   score: number;
 };
 
-const ResultListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
+const ResultListPage = async (props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
   const role = "admin";
-  const currentUserId = "admin-id";
+
   const columns = [
     {
       header: "Title",
@@ -65,12 +64,12 @@ const ResultListPage = async ({
       className: "hidden md:table-cell",
     },
     {
-      header: "Teacher",
+      header: "Faculty",
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
     {
-      header: "Class",
+      header: "Department",
       accessor: "class",
       className: "hidden md:table-cell",
     },
@@ -92,7 +91,7 @@ const ResultListPage = async ({
   const renderRow = (item: ResultList) => (
     <tr
       key={item.id}
-      className="border-b border-zinc-700 even:bg-zinc-800 text-sm hover:bg-zinc-700 text-zinc-300"
+      className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
@@ -101,9 +100,11 @@ const ResultListPage = async ({
           </h3>
         </div>
       </td>
-      <td>{item.student.name + " " + item.student.surname}</td>
-      <td className="hidden md:table-cell">{item.score}</td>
-      <td className="hidden md:table-cell">
+      <td className="text-zinc-400">
+        {item.student.name + " " + item.student.surname}
+      </td>
+      <td className="hidden md:table-cell text-zinc-400">{item.score}</td>
+      <td className="hidden md:table-cell text-zinc-400">
         {item.exam?.lesson.teacher.name +
           " " +
           item.exam?.lesson.teacher.surname ||
@@ -111,10 +112,10 @@ const ResultListPage = async ({
             " " +
             item.assignment?.lesson.teacher.surname}
       </td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-zinc-400">
         {item.exam?.lesson.class.name || item.assignment?.lesson.class.name}
       </td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-zinc-400">
         {new Intl.DateTimeFormat("en-US").format(
           item.exam?.startTime || item.assignment?.startDate
         )}
@@ -133,11 +134,9 @@ const ResultListPage = async ({
   );
 
   const { page, ...queryParams } = searchParams;
-
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.ResultWhereInput = {};
 
   if (queryParams) {
@@ -159,31 +158,6 @@ const ResultListPage = async ({
       }
     }
   }
-
-  // ROLE CONDITIONS
-
-  // switch (role) {
-  //   case "admin":
-  //     break;
-  //   case "teacher":
-  //     query.OR = [
-  //       { exam: { lesson: { teacherId: currentUserId! } } },
-  //       { assignment: { lesson: { teacherId: currentUserId! } } },
-  //     ];
-  //     break;
-
-  //   case "student":
-  //     query.studentId = currentUserId!;
-  //     break;
-
-  //   case "parent":
-  //     query.student = {
-  //       parentId: currentUserId!,
-  //     };
-  //     break;
-  //   default:
-  //     break;
-  // }
 
   const [data, count] = await Promise.all([
     prisma.result.findMany({
@@ -218,18 +192,20 @@ const ResultListPage = async ({
   ]);
 
   return (
-    <div className="bg-zinc-900 p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Results</h1>
+        <h1 className="hidden md:block text-lg font-semibold text-white">
+          All Results
+        </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <Filter className="w-4 h-4 text-zinc-400" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="result" type="create" />

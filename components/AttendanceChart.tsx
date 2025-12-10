@@ -3,14 +3,32 @@ import Image from "next/image";
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
+import { MoreHorizontal } from "lucide-react";
+
+const chartConfig = {
+  present: {
+    label: "Present",
+    color: "hsl(var(--chart-1))",
+  },
+  absent: {
+    label: "Absent",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
 
 const AttendanceChart = ({
   data,
@@ -18,38 +36,34 @@ const AttendanceChart = ({
   data: { name: string; present: number; absent: number }[];
 }) => {
   return (
-    <ResponsiveContainer width="100%" height="90%">
-      <BarChart width={500} height={300} data={data} barSize={20}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
+    <ChartContainer config={chartConfig} className="w-full h-[90%]">
+      <BarChart data={data} barSize={20}>
+        <CartesianGrid vertical={false} stroke="hsl(var(--sidebar-border))" />
         <XAxis
           dataKey="name"
           axisLine={false}
-          tick={{ fill: "#d1d5db" }}
+          tick={{ fill: "hsl(var(--muted-foreground))" }}
           tickLine={false}
         />
-        <YAxis axisLine={false} tick={{ fill: "#d1d5db" }} tickLine={false} />
-        <Tooltip
-          contentStyle={{ borderRadius: "10px", borderColor: "lightgray" }}
+        <YAxis
+          axisLine={false}
+          tick={{ fill: "hsl(var(--muted-foreground))" }}
+          tickLine={false}
         />
-        <Legend
-          align="left"
-          verticalAlign="top"
-          wrapperStyle={{ paddingTop: "20px", paddingBottom: "40px" }}
-        />
+        <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+        <ChartLegend content={<ChartLegendContent />} />
         <Bar
           dataKey="present"
-          fill="#FAE27C"
-          legendType="circle"
-          radius={[10, 10, 0, 0]}
+          fill="var(--color-present)"
+          radius={[4, 4, 0, 0]}
         />
         <Bar
           dataKey="absent"
-          fill="#C3EBFA"
-          legendType="circle"
-          radius={[10, 10, 0, 0]}
+          fill="var(--color-absent)"
+          radius={[4, 4, 0, 0]}
         />
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
 };
 

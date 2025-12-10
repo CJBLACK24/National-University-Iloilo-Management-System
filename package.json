@@ -17,7 +17,9 @@
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@tabler/icons-react": "^3.35.0",
+    "@tanstack/react-query": "^5.90.12",
     "@types/react-big-calendar": "^1.8.9",
+    "@uploadthing/react": "^7.3.3",
     "arcjet": "^1.0.0-beta.15",
     "better-auth": "^1.4.6",
     "class-variance-authority": "^0.7.1",
@@ -35,9 +37,12 @@
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.52.2",
     "react-toastify": "^11.0.5",
-    "recharts": "^3.5.1",
+    "recharts": "^2.15.4",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^7.7.4",
     "zod": "^4.1.13"
   },
   "devDependencies": {

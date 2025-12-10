@@ -5,15 +5,14 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Parent, Prisma, Student } from "@/prisma/generated/prisma/client";
-import Image from "next/image";
+import { Filter, ArrowUpDown } from "lucide-react";
 
 type ParentList = Parent & { students: Student[] };
 
-const ParentListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
+const ParentListPage = async (props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
   const role = "admin";
 
   const columns = [
@@ -49,7 +48,7 @@ const ParentListPage = async ({
   const renderRow = (item: ParentList) => (
     <tr
       key={item.id}
-      className="border-b border-zinc-700 even:bg-zinc-800 text-sm hover:bg-zinc-700 text-zinc-300"
+      className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
@@ -57,11 +56,11 @@ const ParentListPage = async ({
           <p className="text-xs text-zinc-500">{item?.email}</p>
         </div>
       </td>
-      <td className="hidden md:table-cell">
-        {item.students.map((student) => student.name).join(",")}
+      <td className="hidden md:table-cell text-zinc-400">
+        {item.students.map((student) => student.name).join(", ")}
       </td>
-      <td className="hidden md:table-cell">{item.phone}</td>
-      <td className="hidden md:table-cell">{item.address}</td>
+      <td className="hidden md:table-cell text-zinc-400">{item.phone}</td>
+      <td className="hidden md:table-cell text-zinc-400">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
           {role === "admin" && (
@@ -76,11 +75,9 @@ const ParentListPage = async ({
   );
 
   const { page, ...queryParams } = searchParams;
-
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.ParentWhereInput = {};
 
   if (queryParams) {
@@ -110,18 +107,20 @@ const ParentListPage = async ({
   ]);
 
   return (
-    <div className="bg-zinc-900 p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Parents</h1>
+        <h1 className="hidden md:block text-lg font-semibold text-white">
+          All Guardians
+        </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <Filter className="w-4 h-4 text-zinc-400" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
             {role === "admin" && <FormContainer table="parent" type="create" />}
           </div>

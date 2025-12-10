@@ -11,7 +11,7 @@ import {
   Subject,
   Teacher,
 } from "@/prisma/generated/prisma/client";
-import Image from "next/image";
+import { Filter, ArrowUpDown } from "lucide-react";
 
 type AssignmentList = Assignment & {
   lesson: {
@@ -21,25 +21,24 @@ type AssignmentList = Assignment & {
   };
 };
 
-const AssignmentListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
+const AssignmentListPage = async (props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
   const role = "admin" as string;
   const currentUserId = "admin";
 
   const columns = [
     {
-      header: "Subject Name",
+      header: "Course Name",
       accessor: "name",
     },
     {
-      header: "Class",
+      header: "Department",
       accessor: "class",
     },
     {
-      header: "Teacher",
+      header: "Faculty",
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
@@ -61,16 +60,16 @@ const AssignmentListPage = async ({
   const renderRow = (item: AssignmentList) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4">
+      <td className="flex items-center gap-4 p-4 text-white font-medium">
         {item.lesson.subject.name}
       </td>
-      <td>{item.lesson.class.name}</td>
-      <td className="hidden md:table-cell">
+      <td className="text-zinc-400">{item.lesson.class.name}</td>
+      <td className="hidden md:table-cell text-zinc-400">
         {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
       </td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-zinc-400">
         {new Intl.DateTimeFormat("en-US").format(item.dueDate)}
       </td>
       <td>
@@ -87,13 +86,10 @@ const AssignmentListPage = async ({
   );
 
   const { page, ...queryParams } = searchParams;
-
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.AssignmentWhereInput = {};
-
   query.lesson = {};
 
   if (queryParams) {
@@ -119,7 +115,6 @@ const AssignmentListPage = async ({
   }
 
   // ROLE CONDITIONS
-
   switch (role) {
     case "admin":
       break;
@@ -165,26 +160,26 @@ const AssignmentListPage = async ({
     }),
     prisma.assignment.count({ where: query }),
   ]);
+
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">
+        <h1 className="hidden md:block text-lg font-semibold text-white">
           All Assignments
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <Filter className="w-4 h-4 text-zinc-400" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
-            {role === "admin" ||
-              (role === "teacher" && (
-                <FormModal table="assignment" type="create" />
-              ))}
+            {(role === "admin" || role === "teacher") && (
+              <FormModal table="assignment" type="create" />
+            )}
           </div>
         </div>
       </div>

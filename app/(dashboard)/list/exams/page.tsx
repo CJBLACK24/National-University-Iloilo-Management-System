@@ -11,7 +11,7 @@ import {
   Subject,
   Teacher,
 } from "@/prisma/generated/prisma/client";
-import Image from "next/image";
+import { Filter, ArrowUpDown } from "lucide-react";
 
 type ExamList = Exam & {
   lesson: {
@@ -21,24 +21,23 @@ type ExamList = Exam & {
   };
 };
 
-const ExamListPage = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
+const ExamListPage = async (props: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
+  const searchParams = await props.searchParams;
   const role = "admin";
 
   const columns = [
     {
-      header: "Subject Name",
+      header: "Course Name",
       accessor: "name",
     },
     {
-      header: "Class",
+      header: "Department",
       accessor: "class",
     },
     {
-      header: "Teacher",
+      header: "Faculty",
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
@@ -60,7 +59,7 @@ const ExamListPage = async ({
   const renderRow = (item: ExamList) => (
     <tr
       key={item.id}
-      className="border-b border-zinc-700 even:bg-zinc-800 text-sm hover:bg-zinc-700 text-zinc-300"
+      className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
@@ -69,11 +68,11 @@ const ExamListPage = async ({
           </h3>
         </div>
       </td>
-      <td>{item.lesson.class.name}</td>
-      <td className="hidden md:table-cell">
+      <td className="text-zinc-400">{item.lesson.class.name}</td>
+      <td className="hidden md:table-cell text-zinc-400">
         {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
       </td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-zinc-400">
         {new Intl.DateTimeFormat("en-US").format(item.startTime)}
       </td>
       <td>
@@ -90,14 +89,12 @@ const ExamListPage = async ({
   );
 
   const { page, ...queryParams } = searchParams;
-
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.ExamWhereInput = {};
-
   query.lesson = {};
+
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
@@ -120,38 +117,6 @@ const ExamListPage = async ({
     }
   }
 
-  // ROLE CONDITIONS
-
-  // switch (role) {
-  //   case "admin":
-  //     break;
-  //   case "teacher":
-  //     query.lesson.teacherId = currentUserId!;
-  //     break;
-  //   case "student":
-  //     query.lesson.class = {
-  //       students: {
-  //         some: {
-  //           id: currentUserId!,
-  //           // id: "student1" // mock
-  //         },
-  //       },
-  //     };
-  //     break;
-  //   case "parent":
-  //     query.lesson.class = {
-  //       students: {
-  //         some: {
-  //           parentId: currentUserId!,
-  //         },
-  //       },
-  //     };
-  //     break;
-
-  //   default:
-  //     break;
-  // }
-
   const [data, count] = await Promise.all([
     prisma.exam.findMany({
       where: query,
@@ -171,18 +136,20 @@ const ExamListPage = async ({
   ]);
 
   return (
-    <div className="bg-zinc-900 p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Exams</h1>
+        <h1 className="hidden md:block text-lg font-semibold text-white">
+          All Exams
+        </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <Filter className="w-4 h-4 text-zinc-400" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="exam" type="create" />
