@@ -1,0 +1,62 @@
+
+> school-management-system@0.1.0 build
+> next build
+
+   ▲ Next.js 16.0.8 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 22.1s
+   Running TypeScript ...
+   Collecting page data using 3 workers ...
+   Generating static pages using 3 workers (0/22) ...
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(90%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(90%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+   Generating static pages using 3 workers (5/22) 
+[]
+   Generating static pages using 3 workers (10/22) 
+   Generating static pages using 3 workers (16/22) 
+ ✓ Generating static pages using 3 workers (22/22) in 10.9s
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admin
+├ ƒ /api/arcjet
+├ ƒ /api/auth/[...all]
+├ ƒ /api/form
+├ ○ /list/announcements
+├ ○ /list/assignments
+├ ○ /list/classes
+├ ○ /list/events
+├ ○ /list/exams
+├ ○ /list/lessons
+├ ○ /list/parents
+├ ○ /list/results
+├ ○ /list/students
+├ ƒ /list/students/[id]
+├ ○ /list/subjects
+├ ○ /list/teachers
+├ ƒ /list/teachers/[id]
+├ ○ /parent
+├ ○ /sign-in
+├ ○ /student
+└ ○ /teacher
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

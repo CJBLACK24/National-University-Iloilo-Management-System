@@ -65,7 +65,8 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   // This handler checks for Sensitive Information in the request body
-  const decision = await aj.protect(req);
+  // We must provide 'userId' because tokenBucket rule requires it
+  const decision = await aj.protect(req, { userId: "user123", requested: 1 });
 
   if (decision.isDenied()) {
     if (decision.reason.isSensitiveInfo()) {
