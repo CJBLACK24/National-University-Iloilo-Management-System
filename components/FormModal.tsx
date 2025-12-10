@@ -6,6 +6,14 @@ import {
   deleteStudent,
   deleteSubject,
   deleteTeacher,
+  deleteParent,
+  deleteLesson,
+  deleteAssignment,
+  deleteResult,
+  deleteAttendance,
+  deleteEvent,
+  deleteAnnouncement,
+  deleteGrade,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -22,14 +30,14 @@ const deleteActionMap = {
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
-  // TODO: OTHER DELETE ACTIONS
-  parent: deleteSubject,
-  lesson: deleteSubject,
-  assignment: deleteSubject,
-  result: deleteSubject,
-  attendance: deleteSubject,
-  event: deleteSubject,
-  announcement: deleteSubject,
+  parent: deleteParent,
+  lesson: deleteLesson,
+  assignment: deleteAssignment,
+  result: deleteResult,
+  attendance: deleteAttendance,
+  event: deleteEvent,
+  announcement: deleteAnnouncement,
+  grade: deleteGrade,
 };
 
 // USE LAZY LOADING
@@ -46,6 +54,30 @@ const ClassForm = dynamic(() => import("./forms/ClassForm"), {
   loading: () => <div className="text-white">Loading...</div>,
 });
 const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const ParentForm = dynamic(() => import("./forms/ParentForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const LessonForm = dynamic(() => import("./forms/LessonForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const ResultForm = dynamic(() => import("./forms/ResultForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+  loading: () => <div className="text-white">Loading...</div>,
+});
+const GradeForm = dynamic(() => import("./forms/GradeForm"), {
   loading: () => <div className="text-white">Loading...</div>,
 });
 
@@ -91,6 +123,70 @@ const forms: {
   ),
   exam: (setOpen, type, data, relatedData) => (
     <ExamForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  parent: (setOpen, type, data, relatedData) => (
+    <ParentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  lesson: (setOpen, type, data, relatedData) => (
+    <LessonForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  assignment: (setOpen, type, data, relatedData) => (
+    <AssignmentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  result: (setOpen, type, data, relatedData) => (
+    <ResultForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  attendance: (setOpen, type, data, relatedData) => (
+    <AttendanceForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  event: (setOpen, type, data, relatedData) => (
+    <EventForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  announcement: (setOpen, type, data, relatedData) => (
+    <AnnouncementForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  grade: (setOpen, type, data, relatedData) => (
+    <GradeForm
       type={type}
       data={data}
       setOpen={setOpen}

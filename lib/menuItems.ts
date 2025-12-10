@@ -45,6 +45,12 @@ export const menuItems = [
         visible: ["admin", "teacher"],
       },
       {
+        icon: "/class.png",
+        label: "Grades",
+        href: "/list/grades",
+        visible: ["admin"],
+      },
+      {
         icon: "/exam.png",
         label: "Exams",
         href: "/list/exams",

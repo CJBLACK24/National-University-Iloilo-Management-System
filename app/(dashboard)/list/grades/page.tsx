@@ -4,50 +4,38 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import {
-  Assignment,
-  Class,
-  Prisma,
-  Subject,
-  Teacher,
-} from "@/prisma/generated/prisma/client";
+import { Grade, Prisma } from "@/prisma/generated/prisma/client";
 import { Filter, ArrowUpDown } from "lucide-react";
 
-type AssignmentList = Assignment & {
-  lesson: {
-    subject: Subject;
-    class: Class;
-    teacher: Teacher;
+type GradeList = Grade & {
+  _count: {
+    students: number;
+    classess: number;
   };
 };
 
-const AssignmentListPage = async (props: {
+const GradeListPage = async (props: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const searchParams = await props.searchParams;
-  const role = "admin" as string;
-  const currentUserId = "admin";
+  const role = "admin";
 
   const columns = [
     {
-      header: "Course Name",
-      accessor: "name",
+      header: "Grade Level",
+      accessor: "level",
     },
     {
-      header: "Department",
-      accessor: "class",
-    },
-    {
-      header: "Faculty",
-      accessor: "teacher",
+      header: "Students",
+      accessor: "students",
       className: "hidden md:table-cell",
     },
     {
-      header: "Due Date",
-      accessor: "dueDate",
+      header: "Classes",
+      accessor: "classes",
       className: "hidden md:table-cell",
     },
-    ...(role === "admin" || role === "teacher"
+    ...(role === "admin"
       ? [
           {
             header: "Actions",
@@ -57,27 +45,28 @@ const AssignmentListPage = async (props: {
       : []),
   ];
 
-  const renderRow = (item: AssignmentList) => (
+  const renderRow = (item: GradeList) => (
     <tr
       key={item.id}
       className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4 text-white font-medium">
-        {item.lesson.subject.name}
-      </td>
-      <td className="text-zinc-400">{item.lesson.class.name}</td>
-      <td className="hidden md:table-cell text-zinc-400">
-        {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
+      <td className="flex items-center gap-4 p-4">
+        <div className="flex flex-col">
+          <h3 className="font-semibold text-white">Grade {item.level}</h3>
+        </div>
       </td>
       <td className="hidden md:table-cell text-zinc-400">
-        {new Intl.DateTimeFormat("en-US").format(item.dueDate)}
+        {item._count.students} students
+      </td>
+      <td className="hidden md:table-cell text-zinc-400">
+        {item._count.classess} classes
       </td>
       <td>
         <div className="flex items-center gap-2">
-          {(role === "admin" || role === "teacher") && (
+          {role === "admin" && (
             <>
-              <FormContainer table="assignment" type="update" data={item} />
-              <FormContainer table="assignment" type="delete" id={item.id} />
+              <FormContainer table="grade" type="update" data={item} />
+              <FormContainer table="grade" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -89,23 +78,14 @@ const AssignmentListPage = async (props: {
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-  const query: Prisma.AssignmentWhereInput = {};
-  query.lesson = {};
+  const query: Prisma.GradeWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
-          case "classId":
-            query.lesson.classId = parseInt(value);
-            break;
-          case "teacherId":
-            query.lesson.teacherId = value;
-            break;
           case "search":
-            query.lesson.subject = {
-              name: { contains: value, mode: "insensitive" },
-            };
+            query.level = parseInt(value) || undefined;
             break;
           default:
             break;
@@ -114,51 +94,22 @@ const AssignmentListPage = async (props: {
     }
   }
 
-  // ROLE CONDITIONS
-  switch (role) {
-    case "admin":
-      break;
-    case "teacher":
-      query.lesson.teacherId = currentUserId!;
-      break;
-    case "student":
-      query.lesson.class = {
-        students: {
-          some: {
-            id: currentUserId!,
-          },
-        },
-      };
-      break;
-    case "parent":
-      query.lesson.class = {
-        students: {
-          some: {
-            parentId: currentUserId!,
-          },
-        },
-      };
-      break;
-    default:
-      break;
-  }
-
   const [data, count] = await Promise.all([
-    prisma.assignment.findMany({
+    prisma.grade.findMany({
       where: query,
       include: {
-        lesson: {
+        _count: {
           select: {
-            subject: { select: { name: true } },
-            teacher: { select: { name: true, surname: true } },
-            class: { select: { name: true } },
+            students: true,
+            classess: true,
           },
         },
       },
+      orderBy: { level: "asc" },
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    prisma.assignment.count({ where: query }),
+    prisma.grade.count({ where: query }),
   ]);
 
   return (
@@ -166,7 +117,7 @@ const AssignmentListPage = async (props: {
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold text-white">
-          All Assignments
+          All Grades
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
@@ -177,9 +128,7 @@ const AssignmentListPage = async (props: {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
               <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
-            {(role === "admin" || role === "teacher") && (
-              <FormContainer table="assignment" type="create" />
-            )}
+            {role === "admin" && <FormContainer table="grade" type="create" />}
           </div>
         </div>
       </div>
@@ -191,4 +140,4 @@ const AssignmentListPage = async (props: {
   );
 };
 
-export default AssignmentListPage;
+export default GradeListPage;

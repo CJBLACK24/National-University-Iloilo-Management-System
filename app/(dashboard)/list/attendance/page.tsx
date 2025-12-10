@@ -5,46 +5,41 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import {
-  Assignment,
-  Class,
+  Attendance,
+  Lesson,
   Prisma,
-  Subject,
-  Teacher,
+  Student,
 } from "@/prisma/generated/prisma/client";
 import { Filter, ArrowUpDown } from "lucide-react";
 
-type AssignmentList = Assignment & {
-  lesson: {
-    subject: Subject;
-    class: Class;
-    teacher: Teacher;
-  };
+type AttendanceList = Attendance & {
+  student: Student;
+  lesson: Lesson;
 };
 
-const AssignmentListPage = async (props: {
+const AttendanceListPage = async (props: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const searchParams = await props.searchParams;
-  const role = "admin" as string;
-  const currentUserId = "admin";
+  const role = "admin";
 
   const columns = [
     {
-      header: "Course Name",
-      accessor: "name",
+      header: "Student",
+      accessor: "student",
     },
     {
-      header: "Department",
-      accessor: "class",
+      header: "Lesson",
+      accessor: "lesson",
     },
     {
-      header: "Faculty",
-      accessor: "teacher",
+      header: "Date",
+      accessor: "date",
       className: "hidden md:table-cell",
     },
     {
-      header: "Due Date",
-      accessor: "dueDate",
+      header: "Status",
+      accessor: "status",
       className: "hidden md:table-cell",
     },
     ...(role === "admin" || role === "teacher"
@@ -57,27 +52,39 @@ const AssignmentListPage = async (props: {
       : []),
   ];
 
-  const renderRow = (item: AssignmentList) => (
+  const renderRow = (item: AttendanceList) => (
     <tr
       key={item.id}
       className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4 text-white font-medium">
-        {item.lesson.subject.name}
+      <td className="flex items-center gap-4 p-4">
+        <div className="flex flex-col">
+          <h3 className="font-semibold text-white">
+            {item.student.name} {item.student.surname}
+          </h3>
+        </div>
       </td>
-      <td className="text-zinc-400">{item.lesson.class.name}</td>
+      <td className="text-zinc-400">{item.lesson.name}</td>
       <td className="hidden md:table-cell text-zinc-400">
-        {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
+        {new Intl.DateTimeFormat("en-US").format(item.date)}
       </td>
-      <td className="hidden md:table-cell text-zinc-400">
-        {new Intl.DateTimeFormat("en-US").format(item.dueDate)}
+      <td className="hidden md:table-cell">
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            item.present
+              ? "bg-green-500/20 text-green-400"
+              : "bg-red-500/20 text-red-400"
+          }`}
+        >
+          {item.present ? "Present" : "Absent"}
+        </span>
       </td>
       <td>
         <div className="flex items-center gap-2">
           {(role === "admin" || role === "teacher") && (
             <>
-              <FormContainer table="assignment" type="update" data={item} />
-              <FormContainer table="assignment" type="delete" id={item.id} />
+              <FormContainer table="attendance" type="update" data={item} />
+              <FormContainer table="attendance" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -89,23 +96,26 @@ const AssignmentListPage = async (props: {
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-  const query: Prisma.AssignmentWhereInput = {};
-  query.lesson = {};
+  const query: Prisma.AttendanceWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
-          case "classId":
-            query.lesson.classId = parseInt(value);
+          case "studentId":
+            query.studentId = value;
             break;
-          case "teacherId":
-            query.lesson.teacherId = value;
+          case "lessonId":
+            query.lessonId = parseInt(value);
             break;
           case "search":
-            query.lesson.subject = {
-              name: { contains: value, mode: "insensitive" },
-            };
+            query.OR = [
+              { student: { name: { contains: value, mode: "insensitive" } } },
+              {
+                student: { surname: { contains: value, mode: "insensitive" } },
+              },
+              { lesson: { name: { contains: value, mode: "insensitive" } } },
+            ];
             break;
           default:
             break;
@@ -114,51 +124,18 @@ const AssignmentListPage = async (props: {
     }
   }
 
-  // ROLE CONDITIONS
-  switch (role) {
-    case "admin":
-      break;
-    case "teacher":
-      query.lesson.teacherId = currentUserId!;
-      break;
-    case "student":
-      query.lesson.class = {
-        students: {
-          some: {
-            id: currentUserId!,
-          },
-        },
-      };
-      break;
-    case "parent":
-      query.lesson.class = {
-        students: {
-          some: {
-            parentId: currentUserId!,
-          },
-        },
-      };
-      break;
-    default:
-      break;
-  }
-
   const [data, count] = await Promise.all([
-    prisma.assignment.findMany({
+    prisma.attendance.findMany({
       where: query,
       include: {
-        lesson: {
-          select: {
-            subject: { select: { name: true } },
-            teacher: { select: { name: true, surname: true } },
-            class: { select: { name: true } },
-          },
-        },
+        student: true,
+        lesson: true,
       },
+      orderBy: { date: "desc" },
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    prisma.assignment.count({ where: query }),
+    prisma.attendance.count({ where: query }),
   ]);
 
   return (
@@ -166,7 +143,7 @@ const AssignmentListPage = async (props: {
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold text-white">
-          All Assignments
+          Attendance Records
         </h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
@@ -178,7 +155,7 @@ const AssignmentListPage = async (props: {
               <ArrowUpDown className="w-4 h-4 text-zinc-400" />
             </button>
             {(role === "admin" || role === "teacher") && (
-              <FormContainer table="assignment" type="create" />
+              <FormContainer table="attendance" type="create" />
             )}
           </div>
         </div>
@@ -191,4 +168,4 @@ const AssignmentListPage = async (props: {
   );
 };
 
-export default AssignmentListPage;
+export default AttendanceListPage;

@@ -1,12 +1,50 @@
-BETTER_AUTH_SECRET="eihF8OeDXxroisNnv93piDp/2oRcZMmjPdpGPgbRaFM="
+# ====================================
+# WIT University Management System
+# Environment Variables Configuration
+# ====================================
 
-# Connect to Supabase via connection pooling
-DATABASE_URL="postgresql://postgres.lszyishfdpafriogqthv:pTFFlIIWtHTW8sTe@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-# Direct connection to the database. Used for migrations
-DIRECT_URL="postgresql://postgres.lszyishfdpafriogqthv:pTFFlIIWtHTW8sTe@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres"
+# ----------------
+# AUTHENTICATION
+# ----------------
+# Generate with: openssl rand -base64 32
+BETTER_AUTH_SECRET="your-secret-key-here"
+BETTER_AUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-NEXT_PUBLIC_SUPABASE_URL="https://lszyishfdpafriogqthv.supabase.co"
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY="sb_publishable_ctWkbaSOdgjFLH3ut074UA_2zF_49qD"
-ARCJET_KEY="ajkey_01kc1pzskgfahtkyr6c6mkcn29" 
+# ----------------
+# DATABASE (Supabase PostgreSQL)
+# ----------------
+# Connection pooling URL (for application)
+DATABASE_URL="postgresql://postgres.[project-ref]:[password]@aws-1-[region].pooler.supabase.com:6543/postgres?pgbouncer=true"
 
-CLOUDINARY_URL="cloudinary://531669639856969:531669639856969@cjblackdev"
+# Direct connection URL (for migrations)
+DIRECT_URL="postgresql://postgres.[project-ref]:[password]@aws-1-[region].pooler.supabase.com:5432/postgres"
+
+# Supabase public configuration
+NEXT_PUBLIC_SUPABASE_URL="https://[project-ref].supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY="your-supabase-key"
+
+# ----------------
+# GOOGLE OAUTH (Optional)
+# ----------------
+# Get from: https://console.cloud.google.com/apis/credentials
+GOOGLE_CLIENT_ID="your-google-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="GOCSPX-your-google-client-secret"
+
+# ----------------
+# SECURITY (Arcjet)
+# ----------------
+# Get from: https://arcjet.com
+ARCJET_KEY="ajkey_your-arcjet-key"
+
+# ----------------
+# FILE UPLOAD
+# ----------------
+# Cloudinary URL format: cloudinary://[api_key]:[api_secret]@[cloud_name]
+CLOUDINARY_URL="cloudinary://api_key:api_secret@cloud_name"
+
+# UploadThing
+UPLOADTHING_TOKEN="your-uploadthing-token"
+UPLOADTHING_SECRET="sk_live_your-uploadthing-secret"
+UPLOADTHING_APP_ID="your-uploadthing-app-id"
+
