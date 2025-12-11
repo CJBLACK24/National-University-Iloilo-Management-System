@@ -9,8 +9,8 @@ import QueryProvider from "@/providers/query-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "WIT University Management System",
-  description: "Western Institute of Technology University Management System",
+  title: "National University Iloilo Management System",
+  description: "National University IloiloManagement System",
   keywords: [
     "university",
     "management",

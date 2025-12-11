@@ -18,13 +18,13 @@ export default function AuthLayout({
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/SchoolLogo.png"
+            src="/National-University-iloilo.png"
             alt="School Campus"
             fill
-            className="object-cover opacity-60 grayscale-[20%]"
+            className="object-cover opacity-60 grayscale-20"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/60 to-neutral-950/30" />
+          <div className="absolute inset-0 bg-linear-to-t from-neutral-950/90 via-neutral-950/60 to-neutral-950/30" />
         </div>
 
         {/* Content Overlay */}
