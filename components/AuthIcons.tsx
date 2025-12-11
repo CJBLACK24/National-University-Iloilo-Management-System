@@ -11,15 +11,16 @@ const icons = [
 
 export default function AuthIcons() {
   return (
-    <div className="absolute inset-0 pointer-events-none z-20">
+    <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
       {icons.map(({ Component, x, y, duration, delay }, index) => (
         <motion.div
           key={index}
-          className="absolute text-white/40 backdrop-blur-sm p-4 rounded-full bg-white/10 shadow-lg border border-white/20"
+          className="absolute flex items-center justify-center p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] text-white/80 ring-1 ring-white/5"
           style={{ left: x, top: y }}
           animate={{
-            y: [0, -30, 0],
-            rotate: [0, 10, -10, 0],
+            y: [0, -40, 0],
+            rotate: [0, 5, -5, 0],
+            scale: [1, 1.05, 1],
           }}
           transition={{
             duration: duration,
@@ -28,7 +29,9 @@ export default function AuthIcons() {
             delay: delay,
           }}
         >
-          <Component size={48} />
+          <Component size={40} strokeWidth={1.5} />
+          {/* Shine effect */}
+          <div className="absolute inset-0 rounded-2xl bg-linear-to-tr from-white/10 to-transparent opacity-50" />
         </motion.div>
       ))}
     </div>

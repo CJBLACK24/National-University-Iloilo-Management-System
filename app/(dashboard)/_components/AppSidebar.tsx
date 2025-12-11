@@ -191,17 +191,21 @@ export const Logo = () => {
   return (
     <Link
       href="/"
-      className="font-normal flex space-x-2 items-center text-sm text-white py-1 relative z-20"
+      className="font-normal flex flex-col items-center gap-1 text-sm text-white py-1 relative z-20"
     >
-      <div className="h-7 w-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg shrink-0 flex items-center justify-center">
-        <span className="text-white font-bold text-sm">W</span>
-      </div>
+      <Image
+        src="/NU.png"
+        className="h-12 w-auto object-contain"
+        width={100}
+        height={100}
+        alt="NU Iloilo Logo"
+      />
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-semibold text-white whitespace-pre text-base"
+        className="font-bold text-xl tracking-wide bg-linear-to-r from-yellow-200 to-blue-300 bg-clip-text text-transparent"
       >
-        WIT
+        NUIMS
       </motion.span>
     </Link>
   );

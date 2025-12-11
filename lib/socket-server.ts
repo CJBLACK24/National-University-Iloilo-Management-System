@@ -1,4 +1,4 @@
-// Socket.io Server for WIT UMS
+// Socket.io Server for NU Iloilo Management System
 // Run this separately with: npx ts-node lib/socket-server.ts
 
 import { Server } from "socket.io";

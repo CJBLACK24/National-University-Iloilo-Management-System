@@ -9,20 +9,20 @@ import QueryProvider from "@/providers/query-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "National University Iloilo Management System",
-  description: "National University IloiloManagement System",
+  title: "NU Iloilo Management System",
+  description: "National University Iloilo Management System",
   keywords: [
     "university",
     "management",
-    "WIT",
+    "NU Iloilo",
     "education",
     "students",
     "faculty",
   ],
   authors: [{ name: "Christian Duque" }],
   openGraph: {
-    title: "WIT University Management System",
-    description: "Western Institute of Technology University Management System",
+    title: "NU Iloilo Management System",
+    description: "National University Iloilo Management System",
     type: "website",
   },
 };
