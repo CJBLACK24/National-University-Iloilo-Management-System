@@ -3,13 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import {
   attendanceSchema,
   AttendanceSchema,
 } from "@/lib/formValidationSchemas";
 import { createAttendance, updateAttendance } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +32,7 @@ const AttendanceForm = ({
     resolver: zodResolver(attendanceSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createAttendance : updateAttendance,
     {
       success: false,
@@ -85,66 +85,51 @@ const AttendanceForm = ({
           error={errors?.date}
         />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Present</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("present", { setValueAs: (v) => v === "true" })}
-            defaultValue={data?.present ? "true" : "false"}
-          >
-            <option value="true">Present</option>
-            <option value="false">Absent</option>
-          </select>
-          {errors.present?.message && (
-            <p className="text-xs text-red-400">
-              {errors.present.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Present"
+          name="present"
+          register={register}
+          defaultValue={data?.present ? "true" : "false"}
+          error={errors.present}
+          inputProps={{
+            ...register("present", { setValueAs: (v: string) => v === "true" }),
+          }}
+        >
+          <option value="true">Present</option>
+          <option value="false">Absent</option>
+        </SelectField>
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Student</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("studentId")}
-            defaultValue={data?.studentId}
-          >
-            <option value="">Select student</option>
-            {students?.map(
-              (student: { id: string; name: string; surname: string }) => (
-                <option value={student.id} key={student.id}>
-                  {student.name + " " + student.surname}
-                </option>
-              )
-            )}
-          </select>
-          {errors.studentId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.studentId.message.toString()}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Lesson</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
-            defaultValue={data?.lessonId}
-          >
-            <option value="">Select lesson</option>
-            {lessons?.map((lesson: { id: number; name: string }) => (
-              <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
+        <SelectField
+          label="Student"
+          name="studentId"
+          register={register}
+          defaultValue={data?.studentId}
+          error={errors.studentId}
+        >
+          <option value="">Select student</option>
+          {students?.map(
+            (student: { id: string; name: string; surname: string }) => (
+              <option value={student.id} key={student.id}>
+                {student.name + " " + student.surname}
               </option>
-            ))}
-          </select>
-          {errors.lessonId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.lessonId.message.toString()}
-            </p>
+            )
           )}
-        </div>
+        </SelectField>
+
+        <SelectField
+          label="Lesson"
+          name="lessonId"
+          register={register}
+          defaultValue={data?.lessonId}
+          error={errors.lessonId}
+        >
+          <option value="">Select lesson</option>
+          {lessons?.map((lesson: { id: number; name: string }) => (
+            <option value={lesson.id} key={lesson.id}>
+              {lesson.name}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

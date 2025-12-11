@@ -3,15 +3,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useActionState,
+} from "react";
 import {
   studentSchema,
   StudentSchema,
   teacherSchema,
   TeacherSchema,
 } from "@/lib/formValidationSchemas";
-import { useFormState } from "react-dom";
 import {
   createStudent,
   createTeacher,
@@ -43,7 +49,7 @@ const StudentForm = ({
 
   const [img, setImg] = useState<any>();
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createStudent : updateStudent,
     {
       success: false,
@@ -184,69 +190,50 @@ const StudentForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Sex</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("sex")}
-            defaultValue={data?.sex}
-          >
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-          {errors.sex?.message && (
-            <p className="text-xs text-red-400">
-              {errors.sex.message.toString()}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Grade</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("gradeId")}
-            defaultValue={data?.gradeId}
-          >
-            {grades.map((grade: { id: number; level: number }) => (
-              <option value={grade.id} key={grade.id}>
-                {grade.level}
+        <SelectField
+          label="Sex"
+          name="sex"
+          register={register}
+          defaultValue={data?.sex}
+          error={errors.sex}
+        >
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+        </SelectField>
+        <SelectField
+          label="Grade"
+          name="gradeId"
+          register={register}
+          defaultValue={data?.gradeId}
+          error={errors.gradeId}
+        >
+          {grades.map((grade: { id: number; level: number }) => (
+            <option value={grade.id} key={grade.id}>
+              {grade.level}
+            </option>
+          ))}
+        </SelectField>
+        <SelectField
+          label="Class"
+          name="classId"
+          register={register}
+          defaultValue={data?.classId}
+          error={errors.classId}
+        >
+          {classes.map(
+            (classItem: {
+              id: number;
+              name: string;
+              capacity: number;
+              _count: { students: number };
+            }) => (
+              <option value={classItem.id} key={classItem.id}>
+                ({classItem.name} -{" "}
+                {classItem._count.students + "/" + classItem.capacity} Capacity)
               </option>
-            ))}
-          </select>
-          {errors.gradeId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.gradeId.message.toString()}
-            </p>
+            )
           )}
-        </div>
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Class</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("classId")}
-            defaultValue={data?.classId}
-          >
-            {classes.map(
-              (classItem: {
-                id: number;
-                name: string;
-                capacity: number;
-                _count: { students: number };
-              }) => (
-                <option value={classItem.id} key={classItem.id}>
-                  ({classItem.name} -{" "}
-                  {classItem._count.students + "/" + classItem.capacity}{" "}
-                  Capacity)
-                </option>
-              )
-            )}
-          </select>
-          {errors.classId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.classId.message.toString()}
-            </p>
-          )}
-        </div>
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

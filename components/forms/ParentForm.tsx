@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { parentSchema, ParentSchema } from "@/lib/formValidationSchemas";
 import { createParent, updateParent } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -28,7 +27,7 @@ const ParentForm = ({
     resolver: zodResolver(parentSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createParent : updateParent,
     {
       success: false,

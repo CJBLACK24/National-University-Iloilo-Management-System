@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import { lessonSchema, LessonSchema } from "@/lib/formValidationSchemas";
 import { createLesson, updateLesson } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ const LessonForm = ({
     resolver: zodResolver(lessonSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createLesson : updateLesson,
     {
       success: false,
@@ -79,26 +79,20 @@ const LessonForm = ({
           />
         )}
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Day</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("day")}
-            defaultValue={data?.day}
-          >
-            <option value="">Select day</option>
-            <option value="MONDAY">Monday</option>
-            <option value="TUESDAY">Tuesday</option>
-            <option value="WEDNESDAY">Wednesday</option>
-            <option value="THURSDAY">Thursday</option>
-            <option value="FRIDAY">Friday</option>
-          </select>
-          {errors.day?.message && (
-            <p className="text-xs text-red-400">
-              {errors.day.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Day"
+          name="day"
+          register={register}
+          defaultValue={data?.day}
+          error={errors.day}
+        >
+          <option value="">Select day</option>
+          <option value="MONDAY">Monday</option>
+          <option value="TUESDAY">Tuesday</option>
+          <option value="WEDNESDAY">Wednesday</option>
+          <option value="THURSDAY">Thursday</option>
+          <option value="FRIDAY">Friday</option>
+        </SelectField>
 
         <InputField
           label="Start Time"
@@ -117,70 +111,52 @@ const LessonForm = ({
           error={errors?.endTime}
         />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Subject</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("subjectId")}
-            defaultValue={data?.subjectId}
-          >
-            <option value="">Select subject</option>
-            {subjects?.map((subject: { id: number; name: string }) => (
-              <option value={subject.id} key={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-          {errors.subjectId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.subjectId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Subject"
+          name="subjectId"
+          register={register}
+          defaultValue={data?.subjectId}
+          error={errors.subjectId}
+        >
+          <option value="">Select subject</option>
+          {subjects?.map((subject: { id: number; name: string }) => (
+            <option value={subject.id} key={subject.id}>
+              {subject.name}
+            </option>
+          ))}
+        </SelectField>
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Class</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("classId")}
-            defaultValue={data?.classId}
-          >
-            <option value="">Select class</option>
-            {classes?.map((classItem: { id: number; name: string }) => (
-              <option value={classItem.id} key={classItem.id}>
-                {classItem.name}
-              </option>
-            ))}
-          </select>
-          {errors.classId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.classId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Class"
+          name="classId"
+          register={register}
+          defaultValue={data?.classId}
+          error={errors.classId}
+        >
+          <option value="">Select class</option>
+          {classes?.map((classItem: { id: number; name: string }) => (
+            <option value={classItem.id} key={classItem.id}>
+              {classItem.name}
+            </option>
+          ))}
+        </SelectField>
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Teacher</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("teacherId")}
-            defaultValue={data?.teacherId}
-          >
-            <option value="">Select teacher</option>
-            {teachers?.map(
-              (teacher: { id: string; name: string; surname: string }) => (
-                <option value={teacher.id} key={teacher.id}>
-                  {teacher.name + " " + teacher.surname}
-                </option>
-              )
-            )}
-          </select>
-          {errors.teacherId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.teacherId.message.toString()}
-            </p>
+        <SelectField
+          label="Teacher"
+          name="teacherId"
+          register={register}
+          defaultValue={data?.teacherId}
+          error={errors.teacherId}
+        >
+          <option value="">Select teacher</option>
+          {teachers?.map(
+            (teacher: { id: string; name: string; surname: string }) => (
+              <option value={teacher.id} key={teacher.id}>
+                {teacher.name + " " + teacher.surname}
+              </option>
+            )
           )}
-        </div>
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

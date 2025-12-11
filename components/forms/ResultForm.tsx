@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import { resultSchema, ResultSchema } from "@/lib/formValidationSchemas";
 import { createResult, updateResult } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ const ResultForm = ({
     resolver: zodResolver(resultSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createResult : updateResult,
     {
       success: false,
@@ -80,70 +80,52 @@ const ResultForm = ({
           error={errors?.score}
         />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Student</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("studentId")}
-            defaultValue={data?.studentId}
-          >
-            <option value="">Select student</option>
-            {students?.map(
-              (student: { id: string; name: string; surname: string }) => (
-                <option value={student.id} key={student.id}>
-                  {student.name + " " + student.surname}
-                </option>
-              )
-            )}
-          </select>
-          {errors.studentId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.studentId.message.toString()}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Exam (Optional)</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("examId")}
-            defaultValue={data?.examId || ""}
-          >
-            <option value="">No exam</option>
-            {exams?.map((exam: { id: number; title: string }) => (
-              <option value={exam.id} key={exam.id}>
-                {exam.title}
+        <SelectField
+          label="Student"
+          name="studentId"
+          register={register}
+          defaultValue={data?.studentId}
+          error={errors.studentId}
+        >
+          <option value="">Select student</option>
+          {students?.map(
+            (student: { id: string; name: string; surname: string }) => (
+              <option value={student.id} key={student.id}>
+                {student.name + " " + student.surname}
               </option>
-            ))}
-          </select>
-          {errors.examId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.examId.message.toString()}
-            </p>
+            )
           )}
-        </div>
+        </SelectField>
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Assignment (Optional)</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("assignmentId")}
-            defaultValue={data?.assignmentId || ""}
-          >
-            <option value="">No assignment</option>
-            {assignments?.map((assignment: { id: number; title: string }) => (
-              <option value={assignment.id} key={assignment.id}>
-                {assignment.title}
-              </option>
-            ))}
-          </select>
-          {errors.assignmentId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.assignmentId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Exam (Optional)"
+          name="examId"
+          register={register}
+          defaultValue={data?.examId || ""}
+          error={errors.examId}
+        >
+          <option value="">No exam</option>
+          {exams?.map((exam: { id: number; title: string }) => (
+            <option value={exam.id} key={exam.id}>
+              {exam.title}
+            </option>
+          ))}
+        </SelectField>
+
+        <SelectField
+          label="Assignment (Optional)"
+          name="assignmentId"
+          register={register}
+          defaultValue={data?.assignmentId || ""}
+          error={errors.assignmentId}
+        >
+          <option value="">No assignment</option>
+          {assignments?.map((assignment: { id: number; title: string }) => (
+            <option value={assignment.id} key={assignment.id}>
+              {assignment.title}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

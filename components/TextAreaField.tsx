@@ -1,46 +1,37 @@
 import { FieldError } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-type InputFieldProps = {
+type TextAreaFieldProps = {
   label: string;
-  type?: string;
   register: any;
   name: string;
   defaultValue?: string;
   error?: FieldError;
-  hidden?: boolean;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 };
 
-const InputField = ({
+const TextAreaField = ({
   label,
-  type = "text",
   register,
   name,
   defaultValue,
   error,
-  hidden,
   inputProps,
-}: InputFieldProps) => {
+}: TextAreaFieldProps) => {
   return (
-    <div
-      className={cn(
-        "flex flex-col space-y-2 w-full md:w-[48%]", // Increased width slightly for better fit
-        hidden && "hidden"
-      )}
-    >
+    <div className="flex flex-col space-y-2 w-full">
       <Label htmlFor={name} className="text-zinc-500 dark:text-zinc-400">
         {label}
       </Label>
-      <Input
+      <textarea
         id={name}
-        type={type}
         {...register(name)}
         defaultValue={defaultValue}
         {...inputProps}
-        className="bg-zinc-50 dark:bg-zinc-800 text-black dark:text-white border-zinc-200 dark:border-zinc-700 focus-visible:ring-offset-0"
+        className={cn(
+          "flex min-h-[100px] w-full rounded-md border-none bg-zinc-50 dark:bg-zinc-800 px-3 py-2 text-sm text-black dark:text-white shadow-input transition duration-400 placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-600 disabled:cursor-not-allowed disabled:opacity-50 dark:shadow-[0px_0px_1px_1px_#404040]"
+        )}
       />
       {error?.message && (
         <p className="text-xs text-red-500 font-medium">
@@ -51,4 +42,4 @@ const InputField = ({
   );
 };
 
-export default InputField;
+export default TextAreaField;

@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import {
   classSchema,
   ClassSchema,
@@ -15,8 +16,7 @@ import {
   updateClass,
   updateSubject,
 } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -39,9 +39,7 @@ const ClassForm = ({
     resolver: zodResolver(classSchema) as any,
   });
 
-  // AFTER REACT 19 IT'LL BE USEACTIONSTATE
-
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createClass : updateClass,
     {
       success: false,
@@ -97,54 +95,42 @@ const ClassForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Supervisor</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("supervisorId")}
-            defaultValue={data?.teachers}
-          >
-            {teachers.map(
-              (teacher: { id: string; name: string; surname: string }) => (
-                <option
-                  value={teacher.id}
-                  key={teacher.id}
-                  selected={data && teacher.id === data.supervisorId}
-                >
-                  {teacher.name + " " + teacher.surname}
-                </option>
-              )
-            )}
-          </select>
-          {errors.supervisorId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.supervisorId.message.toString()}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Grade</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("gradeId")}
-            defaultValue={data?.gradeId}
-          >
-            {grades.map((grade: { id: number; level: number }) => (
+        <SelectField
+          label="Supervisor"
+          name="supervisorId"
+          register={register}
+          defaultValue={data?.supervisorId} // Fixed data mapping
+          error={errors.supervisorId}
+        >
+          {teachers.map(
+            (teacher: { id: string; name: string; surname: string }) => (
               <option
-                value={grade.id}
-                key={grade.id}
-                selected={data && grade.id === data.gradeId}
+                value={teacher.id}
+                key={teacher.id}
+                selected={data && teacher.id === data.supervisorId}
               >
-                {grade.level}
+                {teacher.name + " " + teacher.surname}
               </option>
-            ))}
-          </select>
-          {errors.gradeId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.gradeId.message.toString()}
-            </p>
+            )
           )}
-        </div>
+        </SelectField>
+        <SelectField
+          label="Grade"
+          name="gradeId"
+          register={register}
+          defaultValue={data?.gradeId}
+          error={errors.gradeId}
+        >
+          {grades.map((grade: { id: number; level: number }) => (
+            <option
+              value={grade.id}
+              key={grade.id}
+              selected={data && grade.id === data.gradeId}
+            >
+              {grade.level}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

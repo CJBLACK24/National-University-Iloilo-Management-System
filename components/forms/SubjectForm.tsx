@@ -3,10 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { createSubject, updateSubject } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -29,9 +29,7 @@ const SubjectForm = ({
     resolver: zodResolver(subjectSchema) as any,
   });
 
-  // AFTER REACT 19 IT'LL BE USEACTIONSTATE
-
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createSubject : updateSubject,
     {
       success: false,
@@ -80,28 +78,22 @@ const SubjectForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Teachers</label>
-          <select
-            multiple
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("teachers")}
-            defaultValue={data?.teachers}
-          >
-            {teachers.map(
-              (teacher: { id: string; name: string; surname: string }) => (
-                <option value={teacher.id} key={teacher.id}>
-                  {teacher.name + " " + teacher.surname}
-                </option>
-              )
-            )}
-          </select>
-          {errors.teachers?.message && (
-            <p className="text-xs text-red-400">
-              {errors.teachers.message.toString()}
-            </p>
+        <SelectField
+          label="Teachers"
+          name="teachers"
+          register={register}
+          defaultValue={data?.teachers}
+          error={errors.teachers}
+          multiple
+        >
+          {teachers.map(
+            (teacher: { id: string; name: string; surname: string }) => (
+              <option value={teacher.id} key={teacher.id}>
+                {teacher.name + " " + teacher.surname}
+              </option>
+            )
           )}
-        </div>
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

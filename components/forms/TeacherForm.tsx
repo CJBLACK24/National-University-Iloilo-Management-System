@@ -3,10 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useActionState,
+} from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
-import { useFormState } from "react-dom";
 import { createTeacher, updateTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -33,7 +39,7 @@ const TeacherForm = ({
 
   const [img, setImg] = useState<any>();
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createTeacher : updateTeacher,
     {
       success: false,
@@ -147,42 +153,30 @@ const TeacherForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Sex</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("sex")}
-            defaultValue={data?.sex}
-          >
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-          {errors.sex?.message && (
-            <p className="text-xs text-red-400">
-              {errors.sex.message.toString()}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Subjects</label>
-          <select
-            multiple
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("subjects")}
-            defaultValue={data?.subjects}
-          >
-            {subjects.map((subject: { id: number; name: string }) => (
-              <option value={subject.id} key={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-          {errors.subjects?.message && (
-            <p className="text-xs text-red-400">
-              {errors.subjects.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Sex"
+          name="sex"
+          register={register}
+          defaultValue={data?.sex}
+          error={errors.sex}
+        >
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+        </SelectField>
+        <SelectField
+          label="Subjects"
+          name="subjects"
+          register={register}
+          defaultValue={data?.subjects}
+          error={errors.subjects}
+          multiple
+        >
+          {subjects.map((subject: { id: number; name: string }) => (
+            <option value={subject.id} key={subject.id}>
+              {subject.name}
+            </option>
+          ))}
+        </SelectField>
         <CldUploadWidget
           uploadPreset="school"
           onSuccess={(result, { widget }) => {

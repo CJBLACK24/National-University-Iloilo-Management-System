@@ -3,13 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import {
   assignmentSchema,
   AssignmentSchema,
 } from "@/lib/formValidationSchemas";
 import { createAssignment, updateAssignment } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +32,7 @@ const AssignmentForm = ({
     resolver: zodResolver(assignmentSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createAssignment : updateAssignment,
     {
       success: false,
@@ -102,26 +102,20 @@ const AssignmentForm = ({
           error={errors?.dueDate}
         />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Lesson</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
-            defaultValue={data?.lessonId}
-          >
-            <option value="">Select lesson</option>
-            {lessons?.map((lesson: { id: number; name: string }) => (
-              <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
-              </option>
-            ))}
-          </select>
-          {errors.lessonId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.lessonId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Lesson"
+          name="lessonId"
+          register={register}
+          defaultValue={data?.lessonId}
+          error={errors.lessonId}
+        >
+          <option value="">Select lesson</option>
+          {lessons?.map((lesson: { id: number; name: string }) => (
+            <option value={lesson.id} key={lesson.id}>
+              {lesson.name}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

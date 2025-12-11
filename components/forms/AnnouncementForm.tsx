@@ -3,13 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
+import TextAreaField from "../TextAreaField";
 import {
   announcementSchema,
   AnnouncementSchema,
 } from "@/lib/formValidationSchemas";
 import { createAnnouncement, updateAnnouncement } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +33,7 @@ const AnnouncementForm = ({
     resolver: zodResolver(announcementSchema) as any,
   });
 
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createAnnouncement : updateAnnouncement,
     {
       success: false,
@@ -85,19 +86,13 @@ const AnnouncementForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full">
-          <label className="text-xs text-gray-500">Description</label>
-          <textarea
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full min-h-[100px]"
-            {...register("description")}
-            defaultValue={data?.description}
-          />
-          {errors.description?.message && (
-            <p className="text-xs text-red-400">
-              {errors.description.message.toString()}
-            </p>
-          )}
-        </div>
+        <TextAreaField
+          label="Description"
+          name="description"
+          register={register}
+          defaultValue={data?.description}
+          error={errors.description}
+        />
         <InputField
           label="Date"
           name="date"
@@ -107,26 +102,20 @@ const AnnouncementForm = ({
           error={errors?.date}
         />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Class (Optional)</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("classId")}
-            defaultValue={data?.classId || ""}
-          >
-            <option value="">All classes</option>
-            {classes?.map((classItem: { id: number; name: string }) => (
-              <option value={classItem.id} key={classItem.id}>
-                {classItem.name}
-              </option>
-            ))}
-          </select>
-          {errors.classId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.classId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Class (Optional)"
+          name="classId"
+          register={register}
+          defaultValue={data?.classId || ""}
+          error={errors.classId}
+        >
+          <option value="">All classes</option>
+          {classes?.map((classItem: { id: number; name: string }) => (
+            <option value={classItem.id} key={classItem.id}>
+              {classItem.name}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>

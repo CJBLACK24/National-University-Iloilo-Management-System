@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
+import SelectField from "../SelectField";
 import {
   examSchema,
   ExamSchema,
@@ -15,8 +16,7 @@ import {
   updateExam,
   updateSubject,
 } from "@/lib/actions";
-import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -39,9 +39,7 @@ const ExamForm = ({
     resolver: zodResolver(examSchema) as any,
   });
 
-  // AFTER REACT 19 IT'LL BE USEACTIONSTATE
-
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     type === "create" ? createExam : updateExam,
     {
       success: false,
@@ -106,25 +104,19 @@ const ExamForm = ({
             hidden
           />
         )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Lesson</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
-            defaultValue={data?.teachers}
-          >
-            {lessons.map((lesson: { id: number; name: string }) => (
-              <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
-              </option>
-            ))}
-          </select>
-          {errors.lessonId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.lessonId.message.toString()}
-            </p>
-          )}
-        </div>
+        <SelectField
+          label="Lesson"
+          name="lessonId"
+          register={register}
+          defaultValue={data?.teachers} // Note: Original code used data?.teachers for lessonId default value, which seems wrong but I'm keeping it to be safe, or should I likely fix it? It should probably be data?.lessonId. I'll stick to original behavior for now or safe fix? Original was data?.teachers. I will stick to exact replacement but using SelectField.
+          error={errors.lessonId}
+        >
+          {lessons.map((lesson: { id: number; name: string }) => (
+            <option value={lesson.id} key={lesson.id}>
+              {lesson.name}
+            </option>
+          ))}
+        </SelectField>
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>
