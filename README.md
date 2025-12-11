@@ -1,4 +1,4 @@
-# 🎓 WIT University Management System
+# 🎓 National University of Iloilo Management System
 
 A comprehensive university management system built with modern web technologies. This system provides role-based dashboards for administrators, teachers, students, and parents to manage academic operations efficiently.
 
