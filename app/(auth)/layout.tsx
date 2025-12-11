@@ -20,7 +20,7 @@ export default function AuthLayout({
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/National-University-iloilo.png"
+            src="/National-University-Iloilo.png"
             alt="School Campus"
             fill
             className="object-cover opacity-40 grayscale-0"
