@@ -18,7 +18,7 @@ export const POST = async (req: Request) => {
 
       if (body.email) {
         const decision = await aj.protect(req, {
-          userId: "potential-user", // Tracking for rate limiting pre-auth
+          userId: body.email, // Rate limit per email address
           requested: 1, // Consumes 1 token
           email: body.email, // Validate this email
         });
@@ -28,8 +28,8 @@ export const POST = async (req: Request) => {
           if (decision.reason.isEmail()) {
             return NextResponse.json(
               {
-                message: "Invalid or disposable email address used.",
-                error: "Email Validation Failed from Arcjet",
+                message: "Email doesn't exist or is invalid.",
+                error: "Email Validation Error",
               },
               { status: 400 }
             );
@@ -42,13 +42,19 @@ export const POST = async (req: Request) => {
           }
           if (decision.reason.isRateLimit()) {
             return NextResponse.json(
-              { message: "Too many attempts.", error: "Rate Limit" },
+              {
+                message: "Too many attempts. Please try again later.",
+                error: "Rate Limit",
+              },
               { status: 429 }
             );
           }
 
           return NextResponse.json(
-            { message: "Access Forbidden", error: "Arcjet Protection" },
+            {
+              message: "Access Forbidden. Please contact support.",
+              error: "Arcjet Protection",
+            },
             { status: 403 }
           );
         }
