@@ -21,7 +21,7 @@ const SubjectListPage = async (props: {
       accessor: "name",
     },
     {
-      header: "Faculty",
+      header: "OIC HEAD",
       accessor: "teachers",
       className: "hidden md:table-cell",
     },

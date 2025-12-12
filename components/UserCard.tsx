@@ -38,7 +38,7 @@ const UserCard = async ({
           <Icon className="h-4 w-4 text-white" />
         </div>
         <span className="text-[10px] text-zinc-500 uppercase tracking-wider">
-          2024/25
+          {new Date().toLocaleDateString("en-US")}
         </span>
       </CardHeader>
       <CardContent className="px-4 pb-4">

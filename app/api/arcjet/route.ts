@@ -3,10 +3,11 @@ import arcjet, {
   tokenBucket,
   shield,
   sensitiveInfo,
+  validateEmail,
 } from "@arcjet/next";
 import { NextResponse } from "next/server";
 
-const aj = arcjet({
+export const aj = arcjet({
   key: process.env.ARCJET_KEY!,
   rules: [
     // 1. BOT PROTECTION
@@ -31,6 +32,11 @@ const aj = arcjet({
       mode: "LIVE",
       deny: ["EMAIL"], // Block emails in content (example configuration)
     }),
+    // 5. EMAIL VALIDATION
+    validateEmail({
+      mode: "LIVE",
+      block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
+    }),
   ],
 });
 
@@ -38,7 +44,11 @@ export async function GET(req: Request) {
   // Mock User ID for rate limiting
   const userId = "user123";
 
-  const decision = await aj.protect(req, { userId, requested: 1 });
+  const decision = await aj.protect(req, {
+    userId,
+    requested: 1,
+    email: "test@example.com",
+  });
 
   console.log("Arcjet decision", decision);
 
@@ -66,7 +76,11 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   // This handler checks for Sensitive Information in the request body
   // We must provide 'userId' because tokenBucket rule requires it
-  const decision = await aj.protect(req, { userId: "user123", requested: 1 });
+  const decision = await aj.protect(req, {
+    userId: "user123",
+    requested: 1,
+    email: "test@example.com",
+  });
 
   if (decision.isDenied()) {
     if (decision.reason.isSensitiveInfo()) {

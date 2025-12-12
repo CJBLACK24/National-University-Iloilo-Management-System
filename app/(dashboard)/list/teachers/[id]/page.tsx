@@ -9,11 +9,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const SingleTeacherPage = async ({
-  params: { id },
-}: {
-  params: { id: string };
+const SingleTeacherPage = async (props: {
+  params: Promise<{ id: string }>;
 }) => {
+  const { id } = await props.params;
   const role = "admin";
 
   const teacher:

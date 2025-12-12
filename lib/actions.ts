@@ -157,11 +157,13 @@ export const createTeacher = async (
     //   publicMetadata: { role: "teacher" },
     // });
     const userId = crypto.randomUUID();
+    const username =
+      data.username || `TEACHER-${Math.floor(100000 + Math.random() * 900000)}`;
 
     await prisma.teacher.create({
       data: {
         id: userId,
-        username: data.username,
+        username: username,
         name: data.name,
         surname: data.surname,
         email: data.email || null,
@@ -208,7 +210,7 @@ export const updateTeacher = async (
       },
       data: {
         // ...(data.password !== "" && { password: data.password }),
-        username: data.username,
+        ...(data.username && { username: data.username }),
         name: data.name,
         surname: data.surname,
         email: data.email || null,
@@ -278,11 +280,13 @@ export const createStudent = async (
     //   publicMetadata: { role: "student" },
     // });
     const userId = crypto.randomUUID();
+    const username =
+      data.username || `STUDENT-${Math.floor(100000 + Math.random() * 900000)}`;
 
     await prisma.student.create({
       data: {
         id: userId,
-        username: data.username,
+        username: username,
         name: data.name,
         surname: data.surname,
         email: data.email || null,
@@ -327,7 +331,7 @@ export const updateStudent = async (
       },
       data: {
         ...(data.password !== "" && { password: data.password }),
-        username: data.username,
+        ...(data.username && { username: data.username }),
         name: data.name,
         surname: data.surname,
         email: data.email || null,
