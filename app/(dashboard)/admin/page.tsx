@@ -1,5 +1,5 @@
 import Announcements from "@/components/Announcements";
-import AttendanceChartContainer from "@/components/AttendanceChartContainer";
+import GradeChart from "@/components/GradeChart";
 import CountChartContainer from "@/components/CountChartContainer";
 import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
@@ -11,36 +11,43 @@ const AdminPage = async (props: {
   const searchParams = await props.searchParams;
 
   return (
-    <div className="flex gap-4 flex-col xl:flex-row">
-      {/* LEFT */}
-      <div className="w-full xl:w-2/3 flex flex-col gap-4">
-        {/* USER CARDS */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <UserCard type="admin" />
-          <UserCard type="teacher" />
-          <UserCard type="student" />
-          <UserCard type="parent" />
-        </div>
-        {/* MIDDLE CHARTS */}
-        <div className="flex gap-4 flex-col lg:flex-row">
-          {/* COUNT CHART */}
-          <div className="w-full lg:w-1/3 h-[400px]">
-            <CountChartContainer />
+    <div className="p-4 flex flex-col gap-4">
+      {/* TOP SECTION */}
+      <div className="flex gap-4 flex-col xl:flex-row">
+        {/* LEFT COLUMN */}
+        <div className="w-full xl:w-2/3 flex flex-col gap-4">
+          {/* USER CARDS */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <UserCard type="admin" />
+            <UserCard type="teacher" />
+            <UserCard type="student" />
+            <UserCard type="parent" />
           </div>
-          {/* ATTENDANCE CHART */}
-          <div className="w-full lg:w-2/3 h-[400px]">
-            <AttendanceChartContainer />
+          {/* MIDDLE CHARTS */}
+          <div className="flex gap-4 flex-col lg:flex-row">
+            {/* COUNT CHART */}
+            <div className="w-full lg:w-1/3 h-[450px]">
+              <CountChartContainer />
+            </div>
+            {/* GRADE CHART (Replaces Attendance) */}
+            <div className="w-full lg:w-2/3 h-[450px]">
+              <GradeChart />
+            </div>
           </div>
         </div>
-        {/* BOTTOM CHART */}
-        <div className="w-full h-[400px]">
-          <FinanceChart />
+
+        {/* RIGHT COLUMN */}
+        <div className="w-full xl:w-1/3 flex flex-col gap-4">
+          <EventCalendarContainer searchParams={searchParams} />
+          <div className="flex-1 bg-white dark:bg-zinc-900 rounded-xl">
+            <Announcements />
+          </div>
         </div>
       </div>
-      {/* RIGHT */}
-      <div className="w-full xl:w-1/3 flex flex-col gap-4">
-        <EventCalendarContainer searchParams={searchParams} />
-        <Announcements />
+
+      {/* BOTTOM SECTION - FINANCE MAX WIDTH */}
+      <div className="w-full h-[500px]">
+        <FinanceChart />
       </div>
     </div>
   );

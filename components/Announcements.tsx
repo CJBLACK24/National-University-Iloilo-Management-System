@@ -26,7 +26,7 @@ const Announcements = async () => {
   });
 
   return (
-    <div className="bg-zinc-900 p-4 rounded-md">
+    <div className="bg-zinc-900 p-4 rounded-md h-full">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-white">Announcements</h1>
         <ShimmerButton className="h-8 px-4 text-xs">View All</ShimmerButton>
