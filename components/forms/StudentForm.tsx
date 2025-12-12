@@ -85,7 +85,7 @@ const StudentForm = ({
       </span>
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
-          label="Username"
+          label="University ID"
           name="username"
           defaultValue={data?.username}
           register={register}

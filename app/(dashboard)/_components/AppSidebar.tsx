@@ -191,11 +191,11 @@ export const Logo = () => {
   return (
     <Link
       href="/"
-      className="font-normal flex flex-col items-center gap-1 text-sm text-white py-1 relative z-20"
+      className="font-normal flex flex-row items-center gap-2 text-sm text-white py-1 relative z-20"
     >
       <Image
         src="/NU.png"
-        className="h-12 w-auto object-contain"
+        className="h-10 w-auto object-contain"
         width={100}
         height={100}
         alt="NU Iloilo Logo"
