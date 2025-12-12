@@ -196,13 +196,20 @@ export const gradeSchema = z.object({
 
 export type GradeSchema = z.infer<typeof gradeSchema>;
 
-// SignIn Schema
-export const signInSchema = z.object({
-  identifier: z.string().min(1, { message: "Email or ID is required" }),
+// SignIn Schema (Email)
+export const signInEmailSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-export type SignInSchema = z.infer<typeof signInSchema>;
+export type SignInEmailSchema = z.infer<typeof signInEmailSchema>;
+
+// SignIn Schema (Student ID)
+export const signInStudentSchema = z.object({
+  username: z.string().min(1, { message: "University ID is required" }),
+});
+
+export type SignInStudentSchema = z.infer<typeof signInStudentSchema>;
 
 // SignUp Schema
 export const signUpSchema = z.object({

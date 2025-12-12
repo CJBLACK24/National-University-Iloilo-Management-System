@@ -7,7 +7,15 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Prisma, Student } from "@/prisma/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, ArrowUpDown, Eye } from "lucide-react";
+import {
+  Filter,
+  ArrowUpDown,
+  Eye,
+  Users,
+  Calendar,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
 
 type StudentList = Student & { class: Class };
 
@@ -15,7 +23,7 @@ const StudentListPage = async (props: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const searchParams = await props.searchParams;
-  const role = "admin";
+  const role = "admin"; // Mock role, normally from auth
 
   const columns = [
     {
@@ -23,7 +31,7 @@ const StudentListPage = async (props: {
       accessor: "info",
     },
     {
-      header: "Student ID",
+      header: "University ID",
       accessor: "studentId",
       className: "hidden md:table-cell",
     },
@@ -66,7 +74,9 @@ const StudentListPage = async (props: {
           className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
-          <h3 className="font-semibold text-white">{item.name}</h3>
+          <h3 className="font-semibold text-white">
+            {item.name} {item.surname}
+          </h3>
           <p className="text-xs text-zinc-500">{item.class.name}</p>
         </div>
       </td>
@@ -118,7 +128,7 @@ const StudentListPage = async (props: {
     }
   }
 
-  const [data, count] = await Promise.all([
+  const [data, count, totalEvents] = await Promise.all([
     prisma.student.findMany({
       where: query,
       include: {
@@ -126,36 +136,90 @@ const StudentListPage = async (props: {
       },
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
+      orderBy: { createdAt: "desc" },
     }),
     prisma.student.count({ where: query }),
+    prisma.event.count(),
   ]);
 
+  // Mock stats since schema might not have specific status fields
+  const stats = [
+    { title: "Total Students", value: count, icon: Users, color: "text-white" },
+    {
+      title: "Total Events",
+      value: totalEvents,
+      icon: Calendar,
+      color: "text-white",
+    },
+    {
+      title: "Pending Approval",
+      value: 0,
+      icon: Clock,
+      color: "text-yellow-500",
+    }, // Mock data
+    {
+      title: "Approved Events",
+      value: totalEvents,
+      icon: CheckCircle2,
+      color: "text-green-500",
+    }, // Mock data
+  ];
+
   return (
-    <div className="bg-zinc-900 p-4 rounded-xl flex-1 m-4 mt-0 border border-zinc-800">
-      {/* TOP */}
-      <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold text-white">
-          All Students
-        </h1>
-        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch />
-          <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
-              <Filter className="w-4 h-4 text-zinc-400" />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
-              <ArrowUpDown className="w-4 h-4 text-zinc-400" />
-            </button>
-            {role === "admin" && (
-              <FormContainer table="student" type="create" />
-            )}
+    <div className="p-4 flex flex-col gap-8">
+      {/* STATS CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl flex items-start justify-between shadow-lg"
+          >
+            <div className="flex flex-col gap-2">
+              <span className="text-zinc-400 text-sm font-medium">
+                {stat.title}
+              </span>
+              <span className="text-3xl font-bold text-white">
+                {stat.value}
+              </span>
+            </div>
+            <div className="p-2 bg-zinc-800 rounded-lg">
+              <stat.icon className={`w-6 h-6 ${stat.color}`} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* TABLE SECTION */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-lg">
+        {/* TOP */}
+        <div className="p-5 border-b border-zinc-800 flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-white">All Students</h1>
+          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <TableSearch />
+            <div className="flex items-center gap-4 self-end">
+              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+                <Filter className="w-4 h-4 text-zinc-400" />
+              </button>
+              <button className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors">
+                <ArrowUpDown className="w-4 h-4 text-zinc-400" />
+              </button>
+              {role === "admin" && (
+                <FormContainer table="student" type="create" />
+              )}
+            </div>
           </div>
         </div>
+
+        {/* LIST */}
+        <div className="px-5 pb-5">
+          <Table columns={columns} renderRow={renderRow} data={data} />
+        </div>
+
+        {/* PAGINATION */}
+        <div className="px-5 pb-5 border-t border-zinc-800 pt-4">
+          <Pagination page={p} count={count} />
+        </div>
       </div>
-      {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
-      {/* PAGINATION */}
-      <Pagination page={p} count={count} />
     </div>
   );
 };
