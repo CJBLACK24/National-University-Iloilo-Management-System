@@ -34,7 +34,7 @@ const UserCard = async ({
   return (
     <Card className="rounded-xl bg-zinc-900 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-200">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 pt-4 px-4">
-        <div className={`p-2 rounded-lg bg-gradient-to-br ${colorMap[type]}`}>
+        <div className={`p-2 rounded-lg bg-linear-to-br ${colorMap[type]}`}>
           <Icon className="h-4 w-4 text-white" />
         </div>
         <span className="text-[10px] text-zinc-500 uppercase tracking-wider">
