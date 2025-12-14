@@ -39,7 +39,7 @@ const AdminPage = async (props: {
         {/* RIGHT COLUMN */}
         <div className="w-full xl:w-1/3 flex flex-col gap-4">
           <EventCalendarContainer searchParams={searchParams} />
-          <div className="flex-1 bg-white dark:bg-zinc-900 rounded-xl">
+          <div className="flex-1 rounded-xl">
             <Announcements />
           </div>
         </div>
