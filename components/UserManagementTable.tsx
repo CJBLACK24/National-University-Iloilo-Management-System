@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { updateUserRole, deleteUser } from "@/lib/actions/user-actions";
-import { User } from "@prisma/client";
+import { User } from "@/prisma/generated/prisma/client";
 import { Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
