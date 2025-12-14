@@ -1,11 +1,25 @@
-import Link from "next/link";
+"use client";
+
 import Image from "next/image";
 import { MessageSquare, Search } from "lucide-react";
 import { NotificationDropdown } from "@/components/ui/notification-dropdown";
 import { ProfileDropdown } from "@/components/ui/profile-dropdown";
+import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const Navbar = () => {
-  const role = "admin"; // Mock role
+  const pathname = usePathname();
+  const { data: session } = authClient.useSession();
+
+  // Hide Navbar on messages page to give full height to chat
+  if (pathname === "/list/messages") {
+    return null;
+  }
+
+  const role = session?.user?.role || "user"; // Assuming role is available in session or derived
+  const name = session?.user?.name || "Guest";
+  const image = session?.user?.image || "/avatar.png";
+
   return (
     <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-md sticky top-0 z-40 rounded-xl">
       {/* SEARCH BAR */}
@@ -31,7 +45,7 @@ const Navbar = () => {
         <NotificationDropdown />
 
         {/* Profile */}
-        <ProfileDropdown name="Christian Duque" role={role} />
+        <ProfileDropdown name={name} role={role as string} avatarSrc={image} />
       </div>
     </div>
   );

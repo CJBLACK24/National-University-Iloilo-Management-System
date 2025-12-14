@@ -198,6 +198,40 @@ const ChatInterface = ({
           </div>
         </div>
 
+        {/* ACTIVE NOW / ONLINE USERS */}
+        {!isSearching && (
+          <div className="px-4 py-2">
+            <div className="flex gap-4 overflow-x-auto no-scrollbar py-2">
+              {/* Mock Filter for Active Users or from Socket */}
+              {/* For demonstration, showing first few conversations as 'active' if connected or random */}
+              {isConnected &&
+                conversations.slice(0, 5).map((c) => {
+                  const other = getOtherParticipant(c);
+                  return (
+                    <div
+                      key={c.id}
+                      className="flex flex-col items-center gap-1 cursor-pointer min-w-[60px]"
+                      onClick={() => setSelectedChat(c.id)}
+                    >
+                      <div className="relative w-12 h-12">
+                        <Image
+                          src={other?.avatar || "/noAvatar.png"}
+                          fill
+                          className="rounded-full object-cover border-2 border-zinc-900"
+                          alt=""
+                        />
+                        <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-zinc-900"></div>
+                      </div>
+                      <span className="text-[11px] text-zinc-400 truncate w-full text-center max-w-[60px]">
+                        {other?.name.split(" ")[0]}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        )}
+
         {/* LIST */}
         <div className="flex-1 overflow-y-auto px-2">
           {isSearching ? (

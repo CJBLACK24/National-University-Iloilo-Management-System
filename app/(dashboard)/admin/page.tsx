@@ -4,11 +4,14 @@ import CountChartContainer from "@/components/CountChartContainer";
 import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
+import UserManagementTable from "@/components/UserManagementTable"; // Import the table
+import { getAllUsers } from "@/lib/actions/user-actions"; // Import actions
 
 const AdminPage = async (props: {
   searchParams: Promise<{ [keys: string]: string | undefined }>;
 }) => {
   const searchParams = await props.searchParams;
+  const users = await getAllUsers(); // Fetch users
 
   return (
     <div className="p-4 flex flex-col gap-4">
@@ -33,6 +36,11 @@ const AdminPage = async (props: {
             <div className="w-full lg:w-2/3 h-[450px]">
               <GradeChart />
             </div>
+          </div>
+
+          {/* USER MANAGEMENT TABLE */}
+          <div className="w-full">
+            <UserManagementTable users={users} />
           </div>
         </div>
 
