@@ -140,7 +140,7 @@ const SettingsPage = () => {
                     Dark Mode
                   </span>
                 </div>
-                <div className="border border-zinc-700 hover:border-zinc-600 transition-colors rounded-lg p-4 bg-white flex flex-col gap-2 cursor-pointer opacity-50 cursor-not-allowed">
+                <div className="border border-zinc-700 hover:border-zinc-600 transition-colors rounded-lg p-4 bg-white flex flex-col gap-2 cursor-pointer opacity-50">
                   <div className="w-full h-20 bg-gray-100 rounded-md"></div>
                   <span className="text-sm font-medium text-zinc-900">
                     Light Mode
