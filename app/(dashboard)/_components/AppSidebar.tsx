@@ -1,5 +1,6 @@
+"use client";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-// ... (Logic to be inserted in next step or I do a larger replace)
 
 import { usePathname } from "next/navigation";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
@@ -224,6 +225,3 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-function useState(arg0: boolean): [any, any] {
-  throw new Error("Function not implemented.");
-}

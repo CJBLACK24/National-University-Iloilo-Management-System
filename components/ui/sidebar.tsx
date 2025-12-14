@@ -233,7 +233,7 @@ export const SidebarLink = ({
             duration: 0.15,
             ease: "easeOut",
           }}
-          className="text-zinc-300 text-sm group-hover/sidebar:text-white transition-colors duration-150 whitespace-pre inline-block !p-0 !m-0"
+          className="text-zinc-300 text-sm group-hover/sidebar:text-white transition-colors duration-150 whitespace-nowrap overflow-hidden text-ellipsis inline-block !p-0 !m-0 w-full"
         >
           {link.label}
         </motion.span>
