@@ -16,7 +16,8 @@ const Navbar = () => {
     return null;
   }
 
-  const role = session?.user?.role || "user"; // Assuming role is available in session or derived
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const role = (session?.user as any)?.role || "user";
   const name = session?.user?.name || "Guest";
   const image = session?.user?.image || "/avatar.png";
 

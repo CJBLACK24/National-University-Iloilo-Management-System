@@ -43,14 +43,15 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
     pathname === "/student" ||
     role === "admin" ||
     role === "teacher" ||
-    role === "student";
+    role === "student" ||
+    role === "user";
 
   const links = [
     {
       label: "Home",
-      href: "/admin",
+      href: role === "user" ? "/visitor" : "/admin",
       icon: <LayoutDashboard className="text-zinc-400 h-5 w-5 shrink-0" />,
-      visible: ["admin", "teacher", "student", "parent"],
+      visible: ["admin", "teacher", "student", "parent", "user"],
     },
     {
       label: "Faculty",
@@ -116,7 +117,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
       label: "Events",
       href: "/list/events",
       icon: <Calendar className="text-zinc-400 h-5 w-5 shrink-0" />,
-      visible: ["admin", "teacher", "student", "parent"],
+      visible: ["admin", "teacher", "student", "parent", "user"],
     },
     {
       label: "Messages",
@@ -128,7 +129,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
       label: "Announcements",
       href: "/list/announcements",
       icon: <Megaphone className="text-zinc-400 h-5 w-5 shrink-0" />,
-      visible: ["admin", "teacher", "student", "parent"],
+      visible: ["admin", "teacher", "student", "parent", "user"],
     },
     {
       label: "Profile",
@@ -146,7 +147,7 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
       label: "Logout",
       href: "/logout",
       icon: <LogOut className="text-zinc-400 h-5 w-5 shrink-0" />,
-      visible: ["admin", "teacher", "student", "parent"],
+      visible: ["admin", "teacher", "student", "parent", "user"],
     },
   ];
 

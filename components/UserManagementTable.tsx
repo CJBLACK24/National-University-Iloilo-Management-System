@@ -7,7 +7,13 @@ import { User } from "@prisma/client";
 import { Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const UserManagementTable = ({ users }: { users: User[] }) => {
+const UserManagementTable = ({
+  users,
+  currentUserRole,
+}: {
+  users: User[];
+  currentUserRole: string;
+}) => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
@@ -125,19 +131,25 @@ const UserManagementTable = ({ users }: { users: User[] }) => {
                   </td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">
-                    <select
-                      disabled={loadingId === user.id}
-                      value={user.role || "user"}
-                      onChange={(e) =>
-                        handleRoleChange(user.id, e.target.value)
-                      }
-                      className="bg-zinc-800 border-none text-white text-xs rounded px-2 py-1 cursor-pointer hover:bg-zinc-700 focus:ring-1 focus:ring-blue-500"
-                    >
-                      <option value="user">User</option>
-                      <option value="student">Student</option>
-                      <option value="teacher">Teacher</option>
-                      <option value="admin">Admin</option>
-                    </select>
+                    {currentUserRole === "admin" ? (
+                      <select
+                        disabled={loadingId === user.id}
+                        value={user.role || "user"}
+                        onChange={(e) =>
+                          handleRoleChange(user.id, e.target.value)
+                        }
+                        className="bg-zinc-800 border-none text-white text-xs rounded px-2 py-1 cursor-pointer hover:bg-zinc-700 focus:ring-1 focus:ring-blue-500"
+                      >
+                        <option value="user">User</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    ) : (
+                      <span className="text-zinc-400 capitalize">
+                        {user.role || "User"}
+                      </span>
+                    )}
                     {loadingId === user.id && (
                       <span className="ml-2 text-xs text-blue-500">
                         Saving...
@@ -145,26 +157,28 @@ const UserManagementTable = ({ users }: { users: User[] }) => {
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() =>
-                          alert(
-                            `Edit functionality coming soon for ${user.name}`
-                          )
-                        }
-                        className="text-green-500 hover:text-green-400 font-medium text-xs flex items-center gap-1"
-                      >
-                        <Edit className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        className="text-red-500 hover:text-red-400 font-medium text-xs flex items-center gap-1"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
+                    {currentUserRole === "admin" && (
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() =>
+                            alert(
+                              `Edit functionality coming soon for ${user.name}`
+                            )
+                          }
+                          className="text-green-500 hover:text-green-400 font-medium text-xs flex items-center gap-1"
+                        >
+                          <Edit className="w-4 h-4" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="text-red-500 hover:text-red-400 font-medium text-xs flex items-center gap-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Delete
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))

@@ -7,11 +7,20 @@ import UserCard from "@/components/UserCard";
 import UserManagementTable from "@/components/UserManagementTable"; // Import the table
 import { getAllUsers } from "@/lib/actions/user-actions"; // Import actions
 
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
 const AdminPage = async (props: {
   searchParams: Promise<{ [keys: string]: string | undefined }>;
 }) => {
   const searchParams = await props.searchParams;
   const users = await getAllUsers(); // Fetch users
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const role = (session?.user as any)?.role || "guest";
 
   return (
     <div className="p-4 flex flex-col gap-4">
@@ -40,7 +49,7 @@ const AdminPage = async (props: {
 
           {/* USER MANAGEMENT TABLE */}
           <div className="w-full">
-            <UserManagementTable users={users} />
+            <UserManagementTable users={users} currentUserRole={role} />
           </div>
         </div>
 
