@@ -245,6 +245,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  role          String    @default("user")
 
   @@map("user")
 }
