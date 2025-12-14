@@ -110,6 +110,21 @@ export type Event = Prisma.EventModel
  */
 export type Announcement = Prisma.AnnouncementModel
 /**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model Participant
+ * 
+ */
+export type Participant = Prisma.ParticipantModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
  * Model User
  * 
  */

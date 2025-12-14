@@ -179,6 +179,31 @@ model Announcement {
   class   Class? @relation(fields: [classId], references: [id])
 }
 
+model Conversation {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  
+  messages     Message[]
+  participants Participant[]
+}
+
+model Participant {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  userId         String
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  content        String
+  createdAt      DateTime     @default(now())
+  
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  senderId       String
+}
+
 enum UserSex {
   MALE
   FEMALE

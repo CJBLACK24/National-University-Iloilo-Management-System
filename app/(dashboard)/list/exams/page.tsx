@@ -15,6 +15,7 @@ import { Filter, ArrowUpDown } from "lucide-react";
 
 type ExamList = Exam & {
   lesson: {
+    name: string;
     subject: Subject;
     class: Class;
     teacher: Teacher;
@@ -29,21 +30,30 @@ const ExamListPage = async (props: {
 
   const columns = [
     {
-      header: "Course Name",
-      accessor: "name",
+      header: "Time",
+      accessor: "time",
     },
     {
-      header: "Department",
-      accessor: "class",
+      header: "Code",
+      accessor: "code",
     },
     {
-      header: "Faculty",
+      header: "Subject",
+      accessor: "subject",
+    },
+    {
+      header: "Instructor",
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
     {
-      header: "Date",
-      accessor: "date",
+      header: "Proctor",
+      accessor: "proctor",
+      className: "hidden lg:table-cell",
+    },
+    {
+      header: "Room",
+      accessor: "room",
       className: "hidden md:table-cell",
     },
     ...(role === "admin" || role === "teacher"
@@ -61,19 +71,30 @@ const ExamListPage = async (props: {
       key={item.id}
       className="border-b border-zinc-800 text-sm hover:bg-zinc-800/50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4">
-        <div className="flex flex-col">
-          <h3 className="font-semibold text-white">
-            {item.lesson.subject.name}
-          </h3>
-        </div>
+      <td className="p-4 text-zinc-300">
+        {new Intl.DateTimeFormat("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }).format(item.startTime)}
+        -
+        {new Intl.DateTimeFormat("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }).format(item.endTime)}
       </td>
-      <td className="text-zinc-400">{item.lesson.class.name}</td>
+      <td className="text-white font-medium">{item.lesson.name}</td>{" "}
+      {/* Using lesson name as Code */}
+      <td className="text-zinc-400">{item.lesson.subject.name}</td>
       <td className="hidden md:table-cell text-zinc-400">
         {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
       </td>
+      <td className="hidden lg:table-cell text-zinc-500 italic">
+        {/* Mock proctor as it is not in schema */}-
+      </td>
       <td className="hidden md:table-cell text-zinc-400">
-        {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+        {item.lesson.class.name}
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -123,6 +144,7 @@ const ExamListPage = async (props: {
       include: {
         lesson: {
           select: {
+            name: true,
             subject: { select: { name: true } },
             teacher: { select: { name: true, surname: true } },
             class: { select: { name: true } },

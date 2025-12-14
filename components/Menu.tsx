@@ -83,6 +83,12 @@ export const menuItems = [
     title: "OTHER",
     items: [
       {
+        icon: "/setting.png", // Reusing setting or user icon
+        label: "Role Management",
+        href: "/admin/roles",
+        visible: ["admin"],
+      },
+      {
         icon: "/profile.png",
         label: "Profile",
         href: "/profile",
@@ -107,7 +113,7 @@ export const menuItems = [
 const Menu = () => {
   // const user = await currentUser();
   // const role = user?.publicMetadata.role as string;
-  const role = "admin"; // MOCK ROLE
+  const role: string = "admin"; // MOCK ROLE
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
@@ -132,6 +138,35 @@ const Menu = () => {
                   />
                   <span className="hidden lg:block">{item.label}</span>
                 </Link>
+              );
+            } else if (role === "parent") {
+              // Show locked items for Guardians/Parents
+              return (
+                <div
+                  key={item.label}
+                  className="flex items-center justify-center lg:justify-start gap-4 text-slate-500 py-2 md:px-2 rounded-md cursor-not-allowed opacity-50 relative group"
+                >
+                  <div className="relative">
+                    <Image
+                      src={item.icon}
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="invert brightness-0 filter grayscale"
+                    />
+                    <Image
+                      src="/lock.png" // Assuming you might need a lock icon, or use an emoji/lucide icon if image missing. I'll use text or existing if available. Using emoji for safety or just styling.
+                      alt="locked"
+                      width={10}
+                      height={10}
+                      className="absolute -top-1 -right-1"
+                    />
+                  </div>
+                  <span className="hidden lg:block">{item.label}</span>
+                  <div className="absolute left-full ml-2 bg-black text-white text-xs p-1 rounded hidden group-hover:block whitespace-nowrap z-50">
+                    Unauthorized Access
+                  </div>
+                </div>
               );
             }
           })}

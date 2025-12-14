@@ -14,13 +14,35 @@ const EventCalendar = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (value instanceof Date) {
-      router.push(`?date=${value}`);
-    }
-  }, [value, router]);
+  // Mock Holidays
+  const holidays = [
+    new Date(2025, 0, 1), // Jan 1
+    new Date(2025, 3, 9), // Day of Valor
+    new Date(2025, 3, 17), // Maundy Thursday
+    new Date(2025, 3, 18), // Good Friday
+    new Date(2025, 4, 1), // Labor Day
+    new Date(2025, 5, 12), // Independence Day
+    new Date(2025, 11, 25), // Dec 25
+    new Date(2025, 11, 30), // Rizal Day
+  ];
 
-  return <Calendar onChange={onChange} value={value} />;
+  const isHoliday = (date: Date) => {
+    return holidays.some(
+      (holiday) =>
+        holiday.getDate() === date.getDate() &&
+        holiday.getMonth() === date.getMonth()
+    );
+  };
+
+  return (
+    <Calendar
+      onChange={onChange}
+      value={value}
+      tileClassName={({ date, view }) =>
+        view === "month" && isHoliday(date) ? "holiday-tile" : null
+      }
+    />
+  );
 };
 
 export default EventCalendar;

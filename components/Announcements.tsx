@@ -29,7 +29,9 @@ const Announcements = async () => {
     <div className="bg-zinc-900 p-4 rounded-md h-full">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-white">Announcements</h1>
-        <ShimmerButton className="h-8 px-4 text-xs">View All</ShimmerButton>
+        <ShimmerButton className="h-8 px-4 text-xs" background="#27272a">
+          View All
+        </ShimmerButton>
       </div>
       <div className="flex flex-col gap-4 mt-4">
         {data[0] && (

@@ -66,6 +66,20 @@ const ClassForm = ({
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      <div className="bg-zinc-800 p-4 rounded-md border border-zinc-700">
+        <h2 className="text-sm font-semibold text-white mb-2">
+          Expected Programs (NU Iloilo & Branches)
+        </h2>
+        <ul className="text-xs text-zinc-400 list-disc list-inside grid grid-cols-1 md:grid-cols-2 gap-1">
+          <li>
+            Accountancy, Business, and Management (BS Accountancy, BS Tourism)
+          </li>
+          <li>IT and Computer Science (BSIT, BSCS)</li>
+          <li>Allied Health Sciences (BS Psych, BS MedTech, BS Nursing)</li>
+          <li>Engineering and Architecture (BS Arch, BS Civil Eng)</li>
+        </ul>
+      </div>
+
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Create a new class" : "Update the class"}
       </h1>
