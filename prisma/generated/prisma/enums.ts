@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const FriendStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type FriendStatus = (typeof FriendStatus)[keyof typeof FriendStatus]
+
+
 export const UserSex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'

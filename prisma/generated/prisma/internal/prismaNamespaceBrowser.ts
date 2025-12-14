@@ -68,6 +68,7 @@ export const ModelName = {
   Conversation: 'Conversation',
   Participant: 'Participant',
   Message: 'Message',
+  Friend: 'Friend',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -281,10 +282,22 @@ export const MessageScalarFieldEnum = {
   content: 'content',
   createdAt: 'createdAt',
   conversationId: 'conversationId',
-  senderId: 'senderId'
+  senderId: 'senderId',
+  attachment: 'attachment'
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+export const FriendScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  friendId: 'friendId',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type FriendScalarFieldEnum = (typeof FriendScalarFieldEnum)[keyof typeof FriendScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

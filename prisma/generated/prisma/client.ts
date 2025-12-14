@@ -125,6 +125,11 @@ export type Participant = Prisma.ParticipantModel
  */
 export type Message = Prisma.MessageModel
 /**
+ * Model Friend
+ * 
+ */
+export type Friend = Prisma.FriendModel
+/**
  * Model User
  * 
  */

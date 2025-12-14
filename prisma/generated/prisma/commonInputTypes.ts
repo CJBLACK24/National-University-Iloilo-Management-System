@@ -211,6 +211,23 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type EnumFriendStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel> | $Enums.FriendStatus
+}
+
+export type EnumFriendStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel> | $Enums.FriendStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+}
+
 export type BoolNullableFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
   not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -457,6 +474,23 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumFriendStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel> | $Enums.FriendStatus
+}
+
+export type NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FriendStatus | Prisma.EnumFriendStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FriendStatus[] | Prisma.ListEnumFriendStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFriendStatusWithAggregatesFilter<$PrismaModel> | $Enums.FriendStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFriendStatusFilter<$PrismaModel>
 }
 
 export type NestedBoolNullableFilter<$PrismaModel = never> = {
