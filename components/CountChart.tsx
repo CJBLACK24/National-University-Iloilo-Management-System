@@ -60,7 +60,7 @@ const CountChart = ({ boys, girls }: { boys: number; girls: number }) => {
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-[#ec4899]" />
           <div className="text-xs">
-            <span className="text-white font-medium">{girls}</span>
+            <span className="text-[#ec4899] font-medium">{girls}</span>
             <span className="text-zinc-500 ml-1">Female ({girlsPercent}%)</span>
           </div>
         </div>

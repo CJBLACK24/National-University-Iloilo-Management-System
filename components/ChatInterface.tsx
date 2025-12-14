@@ -159,7 +159,7 @@ const ChatInterface = ({
   return (
     <div className="flex h-[calc(100vh-120px)] bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 m-4 mt-0 shadow-2xl">
       {/* SIDEBAR (Messenger Style) */}
-      <div className="w-1/3 border-r border-zinc-800 flex flex-col bg-zinc-900 md:w-80 lg:w-96 flex-shrink-0">
+      <div className="w-1/3 border-r border-zinc-800 flex flex-col bg-zinc-900 md:w-80 lg:w-96 shrink-0">
         {/* HEADER */}
         <div className="p-4 flex flex-col gap-4">
           <div className="flex justify-between items-center">
@@ -282,7 +282,7 @@ const ChatInterface = ({
                   }`}
                 >
                   {/* AVATAR */}
-                  <div className="relative flex-shrink-0">
+                  <div className="relative shrink-0">
                     <div className="w-14 h-14 relative rounded-full overflow-hidden border border-zinc-800">
                       <Image
                         src={other?.avatar || "/noAvatar.png"}
@@ -417,7 +417,7 @@ const ChatInterface = ({
                           : isLast
                           ? "rounded-bl-md"
                           : "rounded-bl-md"
-                      } break-words`}
+                      } wrap-break-word`}
                     >
                       {msg.attachment && (
                         <div className="mb-2 rounded-lg overflow-hidden">

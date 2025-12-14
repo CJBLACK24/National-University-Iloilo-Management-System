@@ -1,5 +1,6 @@
-"use client";
-import React, { useState } from "react";
+import { authClient } from "@/lib/auth-client";
+// ... (Logic to be inserted in next step or I do a larger replace)
+
 import { usePathname } from "next/navigation";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import Link from "next/link";
@@ -29,7 +30,9 @@ import {
 export function AppSidebar({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
-  const role = "admin"; // Mock role for now
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  const role = (user as typeof user & { role: string })?.role || "guest";
 
   // Disable sidebar hover collapse on home/dashboard pages
   const isHomePage =
@@ -166,11 +169,11 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
           <div className="border-t border-zinc-800 pt-3">
             <SidebarLink
               link={{
-                label: "Christian Duque",
+                label: user?.email || "Guest",
                 href: "/profile",
                 icon: (
                   <Image
-                    src="/avatar.png"
+                    src={user?.image || "/avatar.png"}
                     className="h-7 w-7 shrink-0 rounded-full"
                     width={50}
                     height={50}
@@ -221,3 +224,6 @@ const DashboardContent = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
+function useState(arg0: boolean): [any, any] {
+  throw new Error("Function not implemented.");
+}

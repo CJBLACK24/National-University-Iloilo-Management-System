@@ -31,3 +31,16 @@ export const updateUserRole = async (userId: string, newRole: string) => {
     return { success: false, error };
   }
 };
+
+export const deleteUser = async (userId: string) => {
+  try {
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete user", error);
+    return { success: false, error };
+  }
+};

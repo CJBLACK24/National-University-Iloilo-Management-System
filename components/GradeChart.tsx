@@ -48,7 +48,7 @@ const GradeChart = () => {
             <XAxis
               dataKey="grade"
               axisLine={false}
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+              tick={{ fill: "#d4d4d8", fontSize: 12 }}
               tickLine={false}
               interval={0}
             />
