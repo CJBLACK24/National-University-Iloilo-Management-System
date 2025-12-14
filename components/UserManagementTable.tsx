@@ -24,7 +24,7 @@ const UserManagementTable = ({
     setLoadingId(userId);
     await updateUserRole(userId, newRole);
     setLoadingId(null);
-    window.location.reload();
+    router.refresh();
   };
 
   const handleDelete = async (userId: string) => {
