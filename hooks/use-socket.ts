@@ -8,34 +8,46 @@ export const useSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // Initialize the socket connection
-    // Ensure the URL matches your dev/prod environment
-    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const socketInitializer = async () => {
+      try {
+        await fetch("/api/socket/io");
+      } catch (e) {
+        console.error("Failed to init socket server", e);
+      }
 
-    const socketInstance = ClientIO(siteUrl, {
-      path: "/api/socket/io",
-      addTrailingSlash: false,
-      transports: ["websocket"], // Force websocket to avoid xhr poll errors
-    });
+      const socketInstance = ClientIO(
+        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+        {
+          path: "/api/socket/io",
+          addTrailingSlash: false,
+          transports: ["websocket"],
+        }
+      );
 
-    socketInstance.on("connect", () => {
-      console.log("Socket connected FE");
-      setIsConnected(true);
-    });
+      socketInstance.on("connect", () => {
+        console.log("Socket connected FE");
+        setIsConnected(true);
+      });
 
-    socketInstance.on("disconnect", () => {
-      console.log("Socket disconnected FE");
-      setIsConnected(false);
-    });
+      socketInstance.on("disconnect", () => {
+        console.log("Socket disconnected FE");
+        setIsConnected(false);
+      });
 
-    socketInstance.on("connect_error", (err) => {
-      console.error("Socket connection error:", err);
-    });
+      socketInstance.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
 
-    setSocket(socketInstance);
+      setSocket(socketInstance);
+    };
+
+    socketInitializer();
 
     return () => {
-      socketInstance.disconnect();
+      if (socket) {
+        // Clean up if existing
+        // socket.disconnect();
+      }
     };
   }, []);
 

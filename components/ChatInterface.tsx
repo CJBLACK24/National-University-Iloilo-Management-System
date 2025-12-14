@@ -7,9 +7,10 @@ import {
   MoreVertical,
   Phone,
   Video,
-  Plus,
+  Edit,
   Image as ImageIcon,
-  X,
+  Info,
+  ArrowLeft,
 } from "lucide-react";
 import Image from "next/image";
 import { useSocket } from "@/hooks/use-socket";
@@ -63,11 +64,18 @@ const ChatInterface = ({
         setMessages((prev) => [...prev, message]);
       }
       // Update last message in conversation list
-      setConversations((prev) =>
-        prev.map((c) =>
+      setConversations((prev) => {
+        const updated = prev.map((c) =>
           c.id === message.conversationId ? { ...c, messages: [message] } : c
-        )
-      );
+        );
+        // Move updated conversation to top
+        if (updated.some((c) => c.id === message.conversationId)) {
+          const convo = updated.find((c) => c.id === message.conversationId);
+          const others = updated.filter((c) => c.id !== message.conversationId);
+          return [convo, ...others];
+        }
+        return updated;
+      });
     });
 
     return () => {
@@ -78,8 +86,10 @@ const ChatInterface = ({
   // Search Users
   useEffect(() => {
     if (searchQuery.length > 2) {
+      setIsSearching(true);
       searchUsers(searchQuery).then(setSearchResults);
-    } else {
+    } else if (searchQuery.length === 0) {
+      setIsSearching(false);
       setSearchResults([]);
     }
   }, [searchQuery]);
@@ -96,7 +106,7 @@ const ChatInterface = ({
       attachment: attachmentUrl,
     };
 
-    // Optimistic updatet
+    // Optimistic update
     setMessages((prev) => [...prev, optimisticMsg]);
     setInput("");
 
@@ -120,15 +130,20 @@ const ChatInterface = ({
   };
 
   const handleCreateChat = async (userId: string) => {
-    // Create chat
+    // Check if conversation already exists locally first
+    // In a real app, logic would be better
     const convo = await createConversation([currentUserId, userId]);
-    setConversations((prev) => [convo, ...prev]);
+
+    if (!conversations.find((c) => c.id === convo.id)) {
+      setConversations((prev) => [convo, ...prev]);
+    }
+
     setSelectedChat(convo.id);
     setIsSearching(false);
+    setSearchQuery("");
   };
 
   const activeConvo = conversations.find((c) => c.id === selectedChat);
-  // Enhance activeConvo with name/avatar logic (mock for now or derive)
   const getOtherParticipant = (convo: any) => {
     if (!convo) return null;
     const other = convo.participants.find(
@@ -136,246 +151,312 @@ const ChatInterface = ({
     );
     return other
       ? { name: other.userId, avatar: "/noAvatar.png" }
-      : { name: "Chat", avatar: "/noAvatar.png" }; // Fetch real name in PROD
+      : { name: "Chat", avatar: "/noAvatar.png" };
   };
 
   const activeDetails = getOtherParticipant(activeConvo);
 
   return (
-    <div className="flex h-[calc(100vh-120px)] bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 m-4 mt-0">
-      {/* SIDEBAR */}
-      <div className="w-1/3 border-r border-zinc-800 flex flex-col">
-        <div className="p-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900">
-          <div className="relative flex-1 mr-2">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-500" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full bg-zinc-800 text-zinc-300 pl-10 pr-4 py-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-zinc-600"
-            />
-          </div>
-          <button
-            onClick={() => setIsSearching(true)}
-            className="p-2 bg-blue-600 rounded-full hover:bg-blue-700 text-white"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* SEARCH MODAL OVERLAY */}
-        {isSearching && (
-          <div className="absolute top-0 left-0 w-1/3 h-full bg-zinc-900 z-50 border-r border-zinc-800 flex flex-col">
-            <div className="p-4 border-b border-zinc-800 flex justify-between items-center">
-              <input
-                autoFocus
-                placeholder="Search people..."
-                className="bg-transparent text-white outline-none w-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button onClick={() => setIsSearching(false)}>
-                <X className="text-zinc-400" />
+    <div className="flex h-[calc(100vh-120px)] bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 m-4 mt-0 shadow-2xl">
+      {/* SIDEBAR (Messenger Style) */}
+      <div className="w-1/3 border-r border-zinc-800 flex flex-col bg-zinc-900 md:w-80 lg:w-96 flex-shrink-0">
+        {/* HEADER */}
+        <div className="p-4 flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-white">Chats</h1>
+            <div className="flex gap-2">
+              <button className="w-9 h-9 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 text-white transition-colors">
+                <Edit className="w-5 h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto">
+          </div>
+
+          {/* SEARCH PILL */}
+          <div
+            className={`flex items-center gap-2 px-3 py-2 bg-zinc-800 rounded-full transition-all ${
+              isSearching ? "ring-1 ring-blue-500" : ""
+            }`}
+          >
+            {isSearching ? (
+              <ArrowLeft
+                className="w-5 h-5 text-zinc-400 cursor-pointer"
+                onClick={() => {
+                  setIsSearching(false);
+                  setSearchQuery("");
+                }}
+              />
+            ) : (
+              <Search className="w-5 h-5 text-zinc-500" />
+            )}
+            <input
+              type="text"
+              placeholder="Search Messenger"
+              className="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* LIST */}
+        <div className="flex-1 overflow-y-auto px-2">
+          {isSearching ? (
+            // SEARCH RESULTS
+            <div className="flex flex-col gap-1">
+              <p className="px-3 py-2 text-xs font-semibold text-zinc-500 uppercase">
+                Contacts
+              </p>
               {searchResults.map((u) => (
                 <div
                   key={u.id}
                   onClick={() => handleCreateChat(u.id)}
-                  className="p-4 flex items-center gap-3 hover:bg-zinc-800 cursor-pointer text-zinc-300"
+                  className="p-2 flex items-center gap-3 hover:bg-zinc-800/50 rounded-lg cursor-pointer transition-colors group"
                 >
-                  <Image
-                    src={u.img || "/noAvatar.png"}
-                    width={32}
-                    height={32}
-                    alt=""
-                    className="rounded-full object-cover w-8 h-8"
-                  />
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src={u.img || "/noAvatar.png"}
+                      fill
+                      alt=""
+                      className="rounded-full object-cover"
+                    />
+                  </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{u.name}</p>
+                    <p className="text-white font-medium">{u.name}</p>
                     <p className="text-xs text-zinc-500 capitalize">{u.role}</p>
                   </div>
                 </div>
               ))}
+              {searchResults.length === 0 && (
+                <p className="px-3 text-sm text-zinc-500 text-center mt-4">
+                  No results found.
+                </p>
+              )}
             </div>
-          </div>
-        )}
+          ) : (
+            // CONVERSATIONS
+            conversations.map((chat) => {
+              const other = getOtherParticipant(chat);
+              const lastMsg = chat.messages[0];
+              const isActive = selectedChat === chat.id;
 
-        <div className="flex-1 overflow-y-auto">
-          {conversations.map((chat) => {
-            const other = getOtherParticipant(chat);
-            return (
-              <div
-                key={chat.id}
-                onClick={() => setSelectedChat(chat.id)}
-                className={`p-4 flex items-center gap-4 cursor-pointer hover:bg-zinc-800/50 transition-colors ${
-                  selectedChat === chat.id ? "bg-zinc-800" : ""
-                }`}
-              >
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center overflow-hidden">
-                    <Image
-                      src={other?.avatar || "/noAvatar.png"}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className="object-cover"
-                    />
+              return (
+                <div
+                  key={chat.id}
+                  onClick={() => setSelectedChat(chat.id)}
+                  className={`p-2 flex items-center gap-3 rounded-lg cursor-pointer transition-colors group ${
+                    isActive ? "bg-zinc-800/50" : "hover:bg-zinc-800/30"
+                  }`}
+                >
+                  {/* AVATAR */}
+                  <div className="relative flex-shrink-0">
+                    <div className="w-14 h-14 relative rounded-full overflow-hidden border border-zinc-800">
+                      <Image
+                        src={other?.avatar || "/noAvatar.png"}
+                        fill
+                        className="object-cover"
+                        alt=""
+                      />
+                    </div>
+                    {/* Online Indicator (Mock) */}
+                    <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-zinc-900"></div>
+                  </div>
+
+                  {/* TEXT CONTENT */}
+                  <div className="flex-1 min-w-0 pr-2">
+                    <div className="flex justify-between items-baseline">
+                      <h3
+                        className={`text-[15px] truncate text-white ${
+                          lastMsg && lastMsg.unread
+                            ? "font-bold"
+                            : "font-medium"
+                        }`}
+                      >
+                        {other?.name || "User"}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-1 text-[13px]">
+                      <p
+                        className={`truncate max-w-[140px] ${
+                          lastMsg?.unread
+                            ? "text-white font-bold"
+                            : "text-zinc-500"
+                        }`}
+                      >
+                        {lastMsg?.senderId === currentUserId ? "You: " : ""}
+                        {lastMsg?.content ||
+                          (lastMsg?.attachment
+                            ? "Sent an attachment"
+                            : "Start a conversation")}
+                      </p>
+                      <span className="text-zinc-500">·</span>
+                      <span className="text-zinc-500">
+                        {lastMsg
+                          ? new Date(lastMsg.createdAt)
+                              .toLocaleTimeString([], {
+                                hour: "numeric",
+                                minute: "numeric",
+                              })
+                              .replace(" PM", "")
+                              .replace(" AM", "")
+                          : ""}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-baseline mb-1">
-                    <h3 className="text-sm font-semibold text-white truncate">
-                      {other?.name || "User"}
-                    </h3>
-                    <span className="text-xs text-zinc-500">
-                      {chat.messages[0]
-                        ? new Date(
-                            chat.messages[0].createdAt
-                          ).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : ""}
-                    </span>
-                  </div>
-                  <p className="text-xs text-zinc-400 truncate">
-                    {chat.messages[0]?.content || "Start a conversation"}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
 
       {/* CHAT AREA */}
-      <div className="flex-1 flex flex-col bg-[#18181b]">
+      <div className="flex-1 flex flex-col bg-black">
         {selectedChat ? (
           <>
-            {/* CHAT HEADER */}
-            <div className="p-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center overflow-hidden">
+            {/* HEADER */}
+            <div className="p-3 border-b border-zinc-800 flex justify-between items-center bg-zinc-900 shadow-sm z-10">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10">
                   <Image
                     src={activeDetails?.avatar || "/noAvatar.png"}
+                    fill
+                    className="rounded-full object-cover"
                     alt=""
-                    width={40}
-                    height={40}
-                    className="object-cover"
                   />
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold text-white">
+                  <h2 className="text-[17px] font-semibold text-white">
                     {activeDetails?.name}
                   </h2>
-                  <span className="text-xs text-green-500 flex items-center gap-1">
-                    {isConnected && (
-                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    )}
-                    {isConnected ? "Online" : "Connecting..."}
+                  <span className="text-[12px] text-zinc-400 block leading-tight">
+                    {isConnected ? "Active now" : "Offline"}
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-zinc-400">
-                <Phone className="w-5 h-5 cursor-pointer hover:text-white" />
-                <Video className="w-5 h-5 cursor-pointer hover:text-white" />
-                <MoreVertical className="w-5 h-5 cursor-pointer hover:text-white" />
+              <div className="flex items-center gap-4 text-blue-500">
+                <Phone className="w-6 h-6 cursor-pointer hover:bg-zinc-800 p-1 rounded-full box-content" />
+                <Video className="w-6 h-6 cursor-pointer hover:bg-zinc-800 p-1 rounded-full box-content" />
+                <Info className="w-6 h-6 cursor-pointer hover:bg-zinc-800 p-1 rounded-full box-content" />
               </div>
             </div>
 
             {/* MESSAGES */}
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${
-                    msg.senderId === currentUserId
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-1">
+              {messages.map((msg, idx) => {
+                const isMe = msg.senderId === currentUserId;
+                const isLast =
+                  idx === messages.length - 1 ||
+                  messages[idx + 1]?.senderId !== msg.senderId;
+                const isFirst =
+                  idx === 0 || messages[idx - 1]?.senderId !== msg.senderId;
+
+                return (
                   <div
-                    className={`max-w-[70%] rounded-xl p-3 text-sm ${
-                      msg.senderId === currentUserId
-                        ? "bg-blue-600 text-white rounded-br-none"
-                        : "bg-zinc-800 text-zinc-200 rounded-bl-none"
-                    }`}
+                    key={msg.id}
+                    className={`flex ${
+                      isMe ? "justify-end" : "justify-start"
+                    } ${isFirst ? "mt-2" : ""}`}
                   >
-                    {msg.attachment && (
-                      <div className="mb-2 rounded-lg overflow-hidden">
+                    {/* Avatar for other user */}
+                    {!isMe && isLast && (
+                      <div className="w-7 h-7 relative rounded-full overflow-hidden mr-2 self-end">
                         <Image
-                          src={msg.attachment}
-                          width={200}
-                          height={150}
-                          alt="attachment"
-                          className="w-full h-auto"
+                          src={activeDetails?.avatar || "/noAvatar.png"}
+                          fill
+                          className="object-cover"
+                          alt=""
                         />
                       </div>
                     )}
-                    <p>{msg.content}</p>
+                    {!isMe && !isLast && <div className="w-9 mr-0" />}{" "}
+                    {/* Spacer */}
                     <div
-                      className={`text-[10px] mt-1 text-right ${
-                        msg.senderId === currentUserId
-                          ? "text-blue-200"
-                          : "text-zinc-500"
-                      }`}
+                      className={`max-w-[70%] px-3 py-2 text-[15px] ${
+                        isMe
+                          ? "bg-[#0084FF] text-white rounded-2xl"
+                          : "bg-zinc-800 text-white rounded-2xl"
+                      } ${
+                        isMe
+                          ? isLast
+                            ? "rounded-br-md"
+                            : "rounded-br-md"
+                          : isLast
+                          ? "rounded-bl-md"
+                          : "rounded-bl-md"
+                      } break-words`}
                     >
-                      {new Date(msg.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {msg.attachment && (
+                        <div className="mb-2 rounded-lg overflow-hidden">
+                          <Image
+                            src={msg.attachment}
+                            width={300}
+                            height={200}
+                            alt="attachment"
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      )}
+                      {msg.content}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               <div ref={messagesEndRef} />
             </div>
 
             {/* INPUT */}
-            <div className="p-4 border-t border-zinc-800 bg-zinc-900">
-              <div className="flex items-center gap-2 bg-zinc-800 rounded-full px-4 py-2">
-                <CldUploadWidget
-                  uploadPreset="school_management"
-                  onSuccess={(result: any) =>
-                    handleSendMessage(result.info.secure_url)
-                  }
-                >
-                  {({ open }) => (
-                    <button
-                      onClick={() => open()}
-                      className="text-zinc-400 hover:text-white"
-                    >
-                      <ImageIcon className="w-5 h-5" />
-                    </button>
-                  )}
-                </CldUploadWidget>
+            <div className="p-3 bg-zinc-900 flex items-center gap-2">
+              <MoreVertical className="w-6 h-6 text-blue-500 cursor-pointer" />
 
+              <CldUploadWidget
+                uploadPreset="school_management"
+                onSuccess={(result: any) =>
+                  handleSendMessage(result.info.secure_url)
+                }
+              >
+                {({ open }) => (
+                  <button
+                    onClick={() => open()}
+                    className="text-blue-500 hover:text-blue-400"
+                  >
+                    <ImageIcon className="w-6 h-6" />
+                  </button>
+                )}
+              </CldUploadWidget>
+
+              <div className="flex-1 bg-zinc-800 rounded-full px-4 py-2 flex items-center gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 bg-transparent text-zinc-200 focus:outline-none text-sm"
+                  placeholder="Aa"
+                  className="flex-1 bg-transparent text-white placeholder-zinc-500 focus:outline-none text-[15px]"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSendMessage();
                   }}
                 />
-                <button
-                  onClick={() => handleSendMessage()}
-                  className="text-blue-500 hover:text-blue-400"
-                >
-                  <Send className="w-5 h-5" />
+                <button className="text-blue-500">
+                  {/* Smiley icon could go here */}
                 </button>
               </div>
+
+              <button
+                onClick={() => handleSendMessage()}
+                className="text-blue-500 hover:scale-110 transition-transform"
+              >
+                <Send className="w-6 h-6" />
+              </button>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-zinc-500 flex-col gap-4">
-            <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center">
-              <Send className="w-8 h-8 text-zinc-600" />
+          <div className="flex-1 flex items-center justify-center bg-black flex-col gap-4">
+            {/* Empty State */}
+            <div className="text-center text-white">
+              <h2 className="text-2xl font-bold mb-2">
+                Welcome to NU Iloilo Chat
+              </h2>
+              <p className="text-zinc-500">Select a chat to start messaging</p>
             </div>
-            <p>Select a conversation or start a new one</p>
           </div>
         )}
       </div>
