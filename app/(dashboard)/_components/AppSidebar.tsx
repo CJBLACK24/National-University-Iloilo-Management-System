@@ -35,13 +35,15 @@ export function AppSidebar({ children }: { children: React.ReactNode }) {
   const user = session?.user;
   const role = (user as typeof user & { role: string })?.role || "guest";
 
-  // Disable sidebar hover collapse on home/dashboard pages
+  // Disable sidebar hover collapse on home/dashboard pages or if user has specific role
   const isHomePage =
     pathname === "/admin" ||
     pathname === "/" ||
     pathname === "/teacher" ||
     pathname === "/student" ||
-    pathname === "/parent";
+    role === "admin" ||
+    role === "teacher" ||
+    role === "student";
 
   const links = [
     {

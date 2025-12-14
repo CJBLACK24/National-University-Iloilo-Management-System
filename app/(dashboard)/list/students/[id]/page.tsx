@@ -4,7 +4,7 @@ import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
 import StudentAttendanceCard from "@/components/StudentAttendanceCard";
 import prisma from "@/lib/prisma";
-import { Class, Student } from "@/prisma/generated/prisma/client";
+import { Class, Student, Parent } from "@/prisma/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -39,11 +39,13 @@ const SingleStudentPage = async (props: {
   const student:
     | (Student & {
         class: Class & { _count: { lessons: number } };
+        parent: Parent;
       })
     | null = await prisma.student.findUnique({
     where: { id },
     include: {
       class: { include: { _count: { select: { lessons: true } } } },
+      parent: true,
     },
   });
 
@@ -167,6 +169,32 @@ const SingleStudentPage = async (props: {
                     </span>
                     <span className="truncate">{student.address}</span>
                   </div>
+                  {student.parent && (
+                    <>
+                      <div className="w-full flex items-center gap-2 mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-700">
+                        <span className="font-bold text-zinc-500 dark:text-zinc-500">
+                          Guardian:
+                        </span>
+                        <span>
+                          {student.parent.name} {student.parent.surname}
+                        </span>
+                      </div>
+                      <div className="w-full flex items-center gap-2">
+                        <span className="font-bold text-zinc-500 dark:text-zinc-500">
+                          Contact:
+                        </span>
+                        <span>{student.parent.phone}</span>
+                      </div>
+                      <div className="w-full flex items-center gap-2">
+                        <span className="font-bold text-zinc-500 dark:text-zinc-500">
+                          Address:
+                        </span>
+                        <span className="truncate">
+                          {student.parent.address}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

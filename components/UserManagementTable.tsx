@@ -42,7 +42,7 @@ const UserManagementTable = ({ users }: { users: User[] }) => {
   );
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-6 flex flex-col h-full">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden mt-0 flex flex-col h-full">
       <div className="p-6 border-b border-zinc-800 flex justify-between items-center">
         <h2 className="text-xl font-bold text-white">
           Recent Users & Role Management
@@ -137,7 +137,6 @@ const UserManagementTable = ({ users }: { users: User[] }) => {
                       <option value="student">Student</option>
                       <option value="teacher">Teacher</option>
                       <option value="admin">Admin</option>
-                      <option value="parent">Parent</option>
                     </select>
                     {loadingId === user.id && (
                       <span className="ml-2 text-xs text-blue-500">
