@@ -1,53 +1,8 @@
-"use client";
-
-import Image from "next/image";
-import { motion } from "framer-motion";
 import Announcements from "@/components/Announcements";
 import EventCalendar from "@/components/EventCalendar";
-import { useState, useEffect } from "react";
-
-const courses = [
-  {
-    category: "College Offerings",
-    items: [
-      { name: "BS Marine Engineering", image: "/courses/marine.jpg" },
-      { name: "BS Civil Engineering", image: "/courses/civil.jpg" },
-      { name: "BS Mechanical Engineering", image: "/courses/mechanical.jpg" },
-      { name: "BS Electrical Engineering", image: "/courses/electrical.jpg" },
-      { name: "BS Computer Engineering", image: "/courses/computer_eng.jpg" },
-      { name: "BS Information Technology", image: "/courses/it.jpg" },
-      { name: "BS Accountancy", image: "/courses/accountancy.jpg" },
-      { name: "BS Business Administration", image: "/courses/business.jpg" },
-      { name: "BS Hospitality Management", image: "/courses/hospitality.jpg" },
-      { name: "BS Biology", image: "/courses/biology.jpg" },
-    ],
-  },
-  {
-    category: "Senior High School",
-    items: [
-      { name: "STEM", image: "/courses/stem.jpg" },
-      { name: "ABM", image: "/courses/abm.jpg" },
-      { name: "HUMSS", image: "/courses/humss.jpg" },
-      { name: "Maritime Specialization", image: "/courses/maritime_shs.jpg" },
-      { name: "TVL - Cooking/Baking", image: "/courses/cooking.jpg" },
-      { name: "TVL - Animation/Programming", image: "/courses/animation.jpg" },
-    ],
-  },
-];
+import { CourseCard } from "@/components/CourseCard";
 
 export default function VisitorDashboard() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Auto-scroll effect for a "carousel" feel if we implemented a slider,
-  // but for a modern grid, we might just display them beautifully with hover effects.
-  // The user asked for an "automatic carousel", let's try a simple auto-scrolling row or similar.
-  // For now, I will implement a sleek Grid layout as requested "modern grid layout... 2 rows 3 column".
-
-  // Actually, to strictly follow "2 rows 3 column", that's 6 items.
-  // There are many courses. Maybe we show highlighted courses?
-  // Or generic categories?
-  // Let's create a "Featured Courses" grid.
-
   return (
     <div className="p-4 md:p-8 flex flex-col gap-8 text-white min-h-screen">
       {/* HERO / WELCOME */}
@@ -130,35 +85,5 @@ export default function VisitorDashboard() {
         </div>
       </div>
     </div>
-  );
-}
-
-function CourseCard({
-  title,
-  items,
-  color,
-}: {
-  title: string;
-  items: string[];
-  color: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      className={`relative overflow-hidden rounded-2xl p-6 ${color} border border-white/10 shadow-xl`}
-    >
-      <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-      <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 rounded-full bg-black/20 blur-xl" />
-
-      <h3 className="text-2xl font-bold mb-4 relative z-10">{title}</h3>
-      <ul className="space-y-2 relative z-10 text-sm md:text-base text-white/80">
-        {items.map((item, i) => (
-          <li key={i} className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-            {item}
-          </li>
-        ))}
-      </ul>
-    </motion.div>
   );
 }
