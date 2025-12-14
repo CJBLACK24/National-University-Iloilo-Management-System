@@ -190,7 +190,7 @@ const ChatInterface = ({
             )}
             <input
               type="text"
-              placeholder="Search Messenger"
+              placeholder="Search students, teachers..."
               className="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 focus:outline-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
