@@ -15,6 +15,7 @@ import {
   createSubject,
   updateClass,
   updateSubject,
+  CurrentState,
 } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
@@ -39,11 +40,12 @@ const ClassForm = ({
     resolver: zodResolver(classSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createClass : updateClass,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -56,7 +58,7 @@ const ClassForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast(`Subject has been ${type === "create" ? "created" : "updated"}!`);
+      toast(`Class has been ${type === "create" ? "created" : "updated"}!`);
       setOpen(false);
       router.refresh();
     }
@@ -139,7 +141,9 @@ const ClassForm = ({
         </SelectField>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

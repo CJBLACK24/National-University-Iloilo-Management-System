@@ -6,7 +6,7 @@ import InputField from "../InputField";
 import SelectField from "../SelectField";
 import TextAreaField from "../TextAreaField";
 import { eventSchema, EventSchema } from "@/lib/formValidationSchemas";
-import { createEvent, updateEvent } from "@/lib/actions";
+import { createEvent, updateEvent, CurrentState } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -30,11 +30,12 @@ const EventForm = ({
     resolver: zodResolver(eventSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createEvent : updateEvent,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -119,7 +120,9 @@ const EventForm = ({
         </SelectField>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

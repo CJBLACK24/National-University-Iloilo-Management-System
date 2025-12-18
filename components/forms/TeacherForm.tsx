@@ -14,7 +14,7 @@ import {
   startTransition,
 } from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
-import { createTeacher, updateTeacher } from "@/lib/actions";
+import { createTeacher, updateTeacher, CurrentState } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CldUploadWidget } from "next-cloudinary";
@@ -40,11 +40,12 @@ const TeacherForm = ({
 
   const [img, setImg] = useState<any>();
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createTeacher : updateTeacher,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -175,7 +176,9 @@ const TeacherForm = ({
         </CldUploadWidget>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

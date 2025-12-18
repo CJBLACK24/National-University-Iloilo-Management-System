@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import SelectField from "../SelectField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
-import { createSubject, updateSubject } from "@/lib/actions";
+import { createSubject, updateSubject, CurrentState } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -29,11 +29,12 @@ const SubjectForm = ({
     resolver: zodResolver(subjectSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createSubject : updateSubject,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -96,7 +97,9 @@ const SubjectForm = ({
         </SelectField>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

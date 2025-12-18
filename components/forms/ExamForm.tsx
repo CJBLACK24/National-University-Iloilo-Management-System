@@ -15,6 +15,7 @@ import {
   createSubject,
   updateExam,
   updateSubject,
+  CurrentState,
 } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
@@ -39,11 +40,12 @@ const ExamForm = ({
     resolver: zodResolver(examSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createExam : updateExam,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -108,7 +110,7 @@ const ExamForm = ({
           label="Lesson"
           name="lessonId"
           register={register}
-          defaultValue={data?.teachers} // Note: Original code used data?.teachers for lessonId default value, which seems wrong but I'm keeping it to be safe, or should I likely fix it? It should probably be data?.lessonId. I'll stick to original behavior for now or safe fix? Original was data?.teachers. I will stick to exact replacement but using SelectField.
+          defaultValue={data?.lessonId}
           error={errors.lessonId}
         >
           {lessons.map((lesson: { id: number; name: string }) => (
@@ -119,7 +121,9 @@ const ExamForm = ({
         </SelectField>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

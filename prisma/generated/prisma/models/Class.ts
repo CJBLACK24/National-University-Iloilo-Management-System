@@ -29,12 +29,14 @@ export type AggregateClass = {
 export type ClassAvgAggregateOutputType = {
   id: number | null
   capacity: number | null
+  currentEnrollment: number | null
   gradeId: number | null
 }
 
 export type ClassSumAggregateOutputType = {
   id: number | null
   capacity: number | null
+  currentEnrollment: number | null
   gradeId: number | null
 }
 
@@ -42,24 +44,33 @@ export type ClassMinAggregateOutputType = {
   id: number | null
   name: string | null
   capacity: number | null
+  currentEnrollment: number | null
   supervisorId: string | null
   gradeId: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ClassMaxAggregateOutputType = {
   id: number | null
   name: string | null
   capacity: number | null
+  currentEnrollment: number | null
   supervisorId: string | null
   gradeId: number | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ClassCountAggregateOutputType = {
   id: number
   name: number
   capacity: number
+  currentEnrollment: number
   supervisorId: number
   gradeId: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -67,12 +78,14 @@ export type ClassCountAggregateOutputType = {
 export type ClassAvgAggregateInputType = {
   id?: true
   capacity?: true
+  currentEnrollment?: true
   gradeId?: true
 }
 
 export type ClassSumAggregateInputType = {
   id?: true
   capacity?: true
+  currentEnrollment?: true
   gradeId?: true
 }
 
@@ -80,24 +93,33 @@ export type ClassMinAggregateInputType = {
   id?: true
   name?: true
   capacity?: true
+  currentEnrollment?: true
   supervisorId?: true
   gradeId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ClassMaxAggregateInputType = {
   id?: true
   name?: true
   capacity?: true
+  currentEnrollment?: true
   supervisorId?: true
   gradeId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ClassCountAggregateInputType = {
   id?: true
   name?: true
   capacity?: true
+  currentEnrollment?: true
   supervisorId?: true
   gradeId?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -191,8 +213,11 @@ export type ClassGroupByOutputType = {
   id: number
   name: string
   capacity: number
+  currentEnrollment: number
   supervisorId: string | null
   gradeId: number
+  createdAt: Date
+  updatedAt: Date
   _count: ClassCountAggregateOutputType | null
   _avg: ClassAvgAggregateOutputType | null
   _sum: ClassSumAggregateOutputType | null
@@ -222,8 +247,11 @@ export type ClassWhereInput = {
   id?: Prisma.IntFilter<"Class"> | number
   name?: Prisma.StringFilter<"Class"> | string
   capacity?: Prisma.IntFilter<"Class"> | number
+  currentEnrollment?: Prisma.IntFilter<"Class"> | number
   supervisorId?: Prisma.StringNullableFilter<"Class"> | string | null
   gradeId?: Prisma.IntFilter<"Class"> | number
+  createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   supervisor?: Prisma.XOR<Prisma.TeacherNullableScalarRelationFilter, Prisma.TeacherWhereInput> | null
   lessons?: Prisma.LessonListRelationFilter
   students?: Prisma.StudentListRelationFilter
@@ -236,8 +264,11 @@ export type ClassOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   gradeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   supervisor?: Prisma.TeacherOrderByWithRelationInput
   lessons?: Prisma.LessonOrderByRelationAggregateInput
   students?: Prisma.StudentOrderByRelationAggregateInput
@@ -253,8 +284,11 @@ export type ClassWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ClassWhereInput[]
   NOT?: Prisma.ClassWhereInput | Prisma.ClassWhereInput[]
   capacity?: Prisma.IntFilter<"Class"> | number
+  currentEnrollment?: Prisma.IntFilter<"Class"> | number
   supervisorId?: Prisma.StringNullableFilter<"Class"> | string | null
   gradeId?: Prisma.IntFilter<"Class"> | number
+  createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
   supervisor?: Prisma.XOR<Prisma.TeacherNullableScalarRelationFilter, Prisma.TeacherWhereInput> | null
   lessons?: Prisma.LessonListRelationFilter
   students?: Prisma.StudentListRelationFilter
@@ -267,8 +301,11 @@ export type ClassOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   gradeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClassCountOrderByAggregateInput
   _avg?: Prisma.ClassAvgOrderByAggregateInput
   _max?: Prisma.ClassMaxOrderByAggregateInput
@@ -283,13 +320,19 @@ export type ClassScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Class"> | number
   name?: Prisma.StringWithAggregatesFilter<"Class"> | string
   capacity?: Prisma.IntWithAggregatesFilter<"Class"> | number
+  currentEnrollment?: Prisma.IntWithAggregatesFilter<"Class"> | number
   supervisorId?: Prisma.StringNullableWithAggregatesFilter<"Class"> | string | null
   gradeId?: Prisma.IntWithAggregatesFilter<"Class"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Class"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Class"> | Date | string
 }
 
 export type ClassCreateInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
@@ -302,8 +345,11 @@ export type ClassUncheckedCreateInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
@@ -313,6 +359,9 @@ export type ClassUncheckedCreateInput = {
 export type ClassUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
@@ -325,8 +374,11 @@ export type ClassUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
@@ -337,21 +389,30 @@ export type ClassCreateManyInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ClassUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClassUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClassScalarRelationFilter = {
@@ -373,13 +434,17 @@ export type ClassCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
   gradeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ClassAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   gradeId?: Prisma.SortOrder
 }
 
@@ -387,21 +452,28 @@ export type ClassMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
   gradeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ClassMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
   gradeId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ClassSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  currentEnrollment?: Prisma.SortOrder
   gradeId?: Prisma.SortOrder
 }
 
@@ -557,6 +629,9 @@ export type ClassUpdateOneWithoutAnnouncementsNestedInput = {
 export type ClassCreateWithoutStudentsInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   grade: Prisma.GradeCreateNestedOneWithoutClassessInput
@@ -568,8 +643,11 @@ export type ClassUncheckedCreateWithoutStudentsInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutClassInput
@@ -594,6 +672,9 @@ export type ClassUpdateToOneWithWhereWithoutStudentsInput = {
 export type ClassUpdateWithoutStudentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   grade?: Prisma.GradeUpdateOneRequiredWithoutClassessNestedInput
@@ -605,8 +686,11 @@ export type ClassUncheckedUpdateWithoutStudentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutClassNestedInput
@@ -615,6 +699,9 @@ export type ClassUncheckedUpdateWithoutStudentsInput = {
 export type ClassCreateWithoutSupervisorInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
   grade: Prisma.GradeCreateNestedOneWithoutClassessInput
@@ -626,7 +713,10 @@ export type ClassUncheckedCreateWithoutSupervisorInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
@@ -666,13 +756,19 @@ export type ClassScalarWhereInput = {
   id?: Prisma.IntFilter<"Class"> | number
   name?: Prisma.StringFilter<"Class"> | string
   capacity?: Prisma.IntFilter<"Class"> | number
+  currentEnrollment?: Prisma.IntFilter<"Class"> | number
   supervisorId?: Prisma.StringNullableFilter<"Class"> | string | null
   gradeId?: Prisma.IntFilter<"Class"> | number
+  createdAt?: Prisma.DateTimeFilter<"Class"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Class"> | Date | string
 }
 
 export type ClassCreateWithoutGradeInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
@@ -684,7 +780,10 @@ export type ClassUncheckedCreateWithoutGradeInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
@@ -720,6 +819,9 @@ export type ClassUpdateManyWithWhereWithoutGradeInput = {
 export type ClassCreateWithoutLessonsInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
   grade: Prisma.GradeCreateNestedOneWithoutClassessInput
@@ -731,8 +833,11 @@ export type ClassUncheckedCreateWithoutLessonsInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutClassInput
@@ -757,6 +862,9 @@ export type ClassUpdateToOneWithWhereWithoutLessonsInput = {
 export type ClassUpdateWithoutLessonsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
   grade?: Prisma.GradeUpdateOneRequiredWithoutClassessNestedInput
@@ -768,8 +876,11 @@ export type ClassUncheckedUpdateWithoutLessonsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutClassNestedInput
@@ -778,6 +889,9 @@ export type ClassUncheckedUpdateWithoutLessonsInput = {
 export type ClassCreateWithoutEventsInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
@@ -789,8 +903,11 @@ export type ClassUncheckedCreateWithoutEventsInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutClassInput
@@ -815,6 +932,9 @@ export type ClassUpdateToOneWithWhereWithoutEventsInput = {
 export type ClassUpdateWithoutEventsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
@@ -826,8 +946,11 @@ export type ClassUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutClassNestedInput
@@ -836,6 +959,9 @@ export type ClassUncheckedUpdateWithoutEventsInput = {
 export type ClassCreateWithoutAnnouncementsInput = {
   name: string
   capacity: number
+  currentEnrollment?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   supervisor?: Prisma.TeacherCreateNestedOneWithoutClassesInput
   lessons?: Prisma.LessonCreateNestedManyWithoutClassInput
   students?: Prisma.StudentCreateNestedManyWithoutClassInput
@@ -847,8 +973,11 @@ export type ClassUncheckedCreateWithoutAnnouncementsInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
   lessons?: Prisma.LessonUncheckedCreateNestedManyWithoutClassInput
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutClassInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutClassInput
@@ -873,6 +1002,9 @@ export type ClassUpdateToOneWithWhereWithoutAnnouncementsInput = {
 export type ClassUpdateWithoutAnnouncementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
@@ -884,8 +1016,11 @@ export type ClassUncheckedUpdateWithoutAnnouncementsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
@@ -895,12 +1030,18 @@ export type ClassCreateManySupervisorInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   gradeId: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ClassUpdateWithoutSupervisorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
   grade?: Prisma.GradeUpdateOneRequiredWithoutClassessNestedInput
@@ -912,7 +1053,10 @@ export type ClassUncheckedUpdateWithoutSupervisorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
@@ -923,19 +1067,28 @@ export type ClassUncheckedUpdateManyWithoutSupervisorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   gradeId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClassCreateManyGradeInput = {
   id?: number
   name: string
   capacity: number
+  currentEnrollment?: number
   supervisorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ClassUpdateWithoutGradeInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   supervisor?: Prisma.TeacherUpdateOneWithoutClassesNestedInput
   lessons?: Prisma.LessonUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUpdateManyWithoutClassNestedInput
@@ -947,7 +1100,10 @@ export type ClassUncheckedUpdateWithoutGradeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lessons?: Prisma.LessonUncheckedUpdateManyWithoutClassNestedInput
   students?: Prisma.StudentUncheckedUpdateManyWithoutClassNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutClassNestedInput
@@ -958,7 +1114,10 @@ export type ClassUncheckedUpdateManyWithoutGradeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  currentEnrollment?: Prisma.IntFieldUpdateOperationsInput | number
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1023,8 +1182,11 @@ export type ClassSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   capacity?: boolean
+  currentEnrollment?: boolean
   supervisorId?: boolean
   gradeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   supervisor?: boolean | Prisma.Class$supervisorArgs<ExtArgs>
   lessons?: boolean | Prisma.Class$lessonsArgs<ExtArgs>
   students?: boolean | Prisma.Class$studentsArgs<ExtArgs>
@@ -1038,8 +1200,11 @@ export type ClassSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   capacity?: boolean
+  currentEnrollment?: boolean
   supervisorId?: boolean
   gradeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   supervisor?: boolean | Prisma.Class$supervisorArgs<ExtArgs>
   grade?: boolean | Prisma.GradeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["class"]>
@@ -1048,8 +1213,11 @@ export type ClassSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   capacity?: boolean
+  currentEnrollment?: boolean
   supervisorId?: boolean
   gradeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   supervisor?: boolean | Prisma.Class$supervisorArgs<ExtArgs>
   grade?: boolean | Prisma.GradeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["class"]>
@@ -1058,11 +1226,14 @@ export type ClassSelectScalar = {
   id?: boolean
   name?: boolean
   capacity?: boolean
+  currentEnrollment?: boolean
   supervisorId?: boolean
   gradeId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "capacity" | "supervisorId" | "gradeId", ExtArgs["result"]["class"]>
+export type ClassOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "capacity" | "currentEnrollment" | "supervisorId" | "gradeId" | "createdAt" | "updatedAt", ExtArgs["result"]["class"]>
 export type ClassInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   supervisor?: boolean | Prisma.Class$supervisorArgs<ExtArgs>
   lessons?: boolean | Prisma.Class$lessonsArgs<ExtArgs>
@@ -1095,8 +1266,11 @@ export type $ClassPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: number
     name: string
     capacity: number
+    currentEnrollment: number
     supervisorId: string | null
     gradeId: number
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["class"]>
   composites: {}
 }
@@ -1529,8 +1703,11 @@ export interface ClassFieldRefs {
   readonly id: Prisma.FieldRef<"Class", 'Int'>
   readonly name: Prisma.FieldRef<"Class", 'String'>
   readonly capacity: Prisma.FieldRef<"Class", 'Int'>
+  readonly currentEnrollment: Prisma.FieldRef<"Class", 'Int'>
   readonly supervisorId: Prisma.FieldRef<"Class", 'String'>
   readonly gradeId: Prisma.FieldRef<"Class", 'Int'>
+  readonly createdAt: Prisma.FieldRef<"Class", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Class", 'DateTime'>
 }
     
 

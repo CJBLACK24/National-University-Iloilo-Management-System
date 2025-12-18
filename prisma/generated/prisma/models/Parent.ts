@@ -33,6 +33,8 @@ export type ParentMinAggregateOutputType = {
   phone: string | null
   address: string | null
   createdAt: Date | null
+  updatedAt: Date | null
+  userId: string | null
 }
 
 export type ParentMaxAggregateOutputType = {
@@ -44,6 +46,8 @@ export type ParentMaxAggregateOutputType = {
   phone: string | null
   address: string | null
   createdAt: Date | null
+  updatedAt: Date | null
+  userId: string | null
 }
 
 export type ParentCountAggregateOutputType = {
@@ -55,6 +59,8 @@ export type ParentCountAggregateOutputType = {
   phone: number
   address: number
   createdAt: number
+  updatedAt: number
+  userId: number
   _all: number
 }
 
@@ -68,6 +74,8 @@ export type ParentMinAggregateInputType = {
   phone?: true
   address?: true
   createdAt?: true
+  updatedAt?: true
+  userId?: true
 }
 
 export type ParentMaxAggregateInputType = {
@@ -79,6 +87,8 @@ export type ParentMaxAggregateInputType = {
   phone?: true
   address?: true
   createdAt?: true
+  updatedAt?: true
+  userId?: true
 }
 
 export type ParentCountAggregateInputType = {
@@ -90,6 +100,8 @@ export type ParentCountAggregateInputType = {
   phone?: true
   address?: true
   createdAt?: true
+  updatedAt?: true
+  userId?: true
   _all?: true
 }
 
@@ -174,6 +186,8 @@ export type ParentGroupByOutputType = {
   phone: string
   address: string
   createdAt: Date
+  updatedAt: Date
+  userId: string
   _count: ParentCountAggregateOutputType | null
   _min: ParentMinAggregateOutputType | null
   _max: ParentMaxAggregateOutputType | null
@@ -206,6 +220,9 @@ export type ParentWhereInput = {
   phone?: Prisma.StringFilter<"Parent"> | string
   address?: Prisma.StringFilter<"Parent"> | string
   createdAt?: Prisma.DateTimeFilter<"Parent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Parent"> | Date | string
+  userId?: Prisma.StringFilter<"Parent"> | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   students?: Prisma.StudentListRelationFilter
 }
 
@@ -218,6 +235,9 @@ export type ParentOrderByWithRelationInput = {
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  user?: Prisma.UserOrderByWithRelationInput
   students?: Prisma.StudentOrderByRelationAggregateInput
 }
 
@@ -226,6 +246,7 @@ export type ParentWhereUniqueInput = Prisma.AtLeast<{
   username?: string
   email?: string
   phone?: string
+  userId?: string
   AND?: Prisma.ParentWhereInput | Prisma.ParentWhereInput[]
   OR?: Prisma.ParentWhereInput[]
   NOT?: Prisma.ParentWhereInput | Prisma.ParentWhereInput[]
@@ -233,8 +254,10 @@ export type ParentWhereUniqueInput = Prisma.AtLeast<{
   surname?: Prisma.StringFilter<"Parent"> | string
   address?: Prisma.StringFilter<"Parent"> | string
   createdAt?: Prisma.DateTimeFilter<"Parent"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Parent"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   students?: Prisma.StudentListRelationFilter
-}, "id" | "username" | "email" | "phone">
+}, "id" | "username" | "email" | "phone" | "userId">
 
 export type ParentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -245,6 +268,8 @@ export type ParentOrderByWithAggregationInput = {
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   _count?: Prisma.ParentCountOrderByAggregateInput
   _max?: Prisma.ParentMaxOrderByAggregateInput
   _min?: Prisma.ParentMinOrderByAggregateInput
@@ -262,6 +287,8 @@ export type ParentScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringWithAggregatesFilter<"Parent"> | string
   address?: Prisma.StringWithAggregatesFilter<"Parent"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Parent"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Parent"> | Date | string
+  userId?: Prisma.StringWithAggregatesFilter<"Parent"> | string
 }
 
 export type ParentCreateInput = {
@@ -273,6 +300,8 @@ export type ParentCreateInput = {
   phone: string
   address: string
   createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutParentInput
   students?: Prisma.StudentCreateNestedManyWithoutParentInput
 }
 
@@ -285,6 +314,8 @@ export type ParentUncheckedCreateInput = {
   phone: string
   address: string
   createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutParentInput
 }
 
@@ -297,6 +328,8 @@ export type ParentUpdateInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutParentNestedInput
   students?: Prisma.StudentUpdateManyWithoutParentNestedInput
 }
 
@@ -309,6 +342,8 @@ export type ParentUncheckedUpdateInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutParentNestedInput
 }
 
@@ -321,6 +356,8 @@ export type ParentCreateManyInput = {
   phone: string
   address: string
   createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
 }
 
 export type ParentUpdateManyMutationInput = {
@@ -332,6 +369,7 @@ export type ParentUpdateManyMutationInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ParentUncheckedUpdateManyInput = {
@@ -343,6 +381,8 @@ export type ParentUncheckedUpdateManyInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ParentScalarRelationFilter = {
@@ -359,6 +399,8 @@ export type ParentCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type ParentMaxOrderByAggregateInput = {
@@ -370,6 +412,8 @@ export type ParentMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type ParentMinOrderByAggregateInput = {
@@ -381,6 +425,13 @@ export type ParentMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+}
+
+export type ParentNullableScalarRelationFilter = {
+  is?: Prisma.ParentWhereInput | null
+  isNot?: Prisma.ParentWhereInput | null
 }
 
 export type ParentCreateNestedOneWithoutStudentsInput = {
@@ -397,6 +448,38 @@ export type ParentUpdateOneRequiredWithoutStudentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ParentUpdateToOneWithWhereWithoutStudentsInput, Prisma.ParentUpdateWithoutStudentsInput>, Prisma.ParentUncheckedUpdateWithoutStudentsInput>
 }
 
+export type ParentCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.ParentCreateOrConnectWithoutUserInput
+  connect?: Prisma.ParentWhereUniqueInput
+}
+
+export type ParentUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.ParentCreateOrConnectWithoutUserInput
+  connect?: Prisma.ParentWhereUniqueInput
+}
+
+export type ParentUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.ParentCreateOrConnectWithoutUserInput
+  upsert?: Prisma.ParentUpsertWithoutUserInput
+  disconnect?: Prisma.ParentWhereInput | boolean
+  delete?: Prisma.ParentWhereInput | boolean
+  connect?: Prisma.ParentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ParentUpdateToOneWithWhereWithoutUserInput, Prisma.ParentUpdateWithoutUserInput>, Prisma.ParentUncheckedUpdateWithoutUserInput>
+}
+
+export type ParentUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.ParentCreateOrConnectWithoutUserInput
+  upsert?: Prisma.ParentUpsertWithoutUserInput
+  disconnect?: Prisma.ParentWhereInput | boolean
+  delete?: Prisma.ParentWhereInput | boolean
+  connect?: Prisma.ParentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ParentUpdateToOneWithWhereWithoutUserInput, Prisma.ParentUpdateWithoutUserInput>, Prisma.ParentUncheckedUpdateWithoutUserInput>
+}
+
 export type ParentCreateWithoutStudentsInput = {
   id: string
   username: string
@@ -406,6 +489,8 @@ export type ParentCreateWithoutStudentsInput = {
   phone: string
   address: string
   createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutParentInput
 }
 
 export type ParentUncheckedCreateWithoutStudentsInput = {
@@ -417,6 +502,8 @@ export type ParentUncheckedCreateWithoutStudentsInput = {
   phone: string
   address: string
   createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
 }
 
 export type ParentCreateOrConnectWithoutStudentsInput = {
@@ -444,6 +531,8 @@ export type ParentUpdateWithoutStudentsInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutParentNestedInput
 }
 
 export type ParentUncheckedUpdateWithoutStudentsInput = {
@@ -455,6 +544,76 @@ export type ParentUncheckedUpdateWithoutStudentsInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ParentCreateWithoutUserInput = {
+  id: string
+  username: string
+  name: string
+  surname: string
+  email?: string | null
+  phone: string
+  address: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentCreateNestedManyWithoutParentInput
+}
+
+export type ParentUncheckedCreateWithoutUserInput = {
+  id: string
+  username: string
+  name: string
+  surname: string
+  email?: string | null
+  phone: string
+  address: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutParentInput
+}
+
+export type ParentCreateOrConnectWithoutUserInput = {
+  where: Prisma.ParentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+}
+
+export type ParentUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.ParentUpdateWithoutUserInput, Prisma.ParentUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ParentCreateWithoutUserInput, Prisma.ParentUncheckedCreateWithoutUserInput>
+  where?: Prisma.ParentWhereInput
+}
+
+export type ParentUpdateToOneWithWhereWithoutUserInput = {
+  where?: Prisma.ParentWhereInput
+  data: Prisma.XOR<Prisma.ParentUpdateWithoutUserInput, Prisma.ParentUncheckedUpdateWithoutUserInput>
+}
+
+export type ParentUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  surname?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUpdateManyWithoutParentNestedInput
+}
+
+export type ParentUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  surname?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUncheckedUpdateManyWithoutParentNestedInput
 }
 
 
@@ -497,6 +656,9 @@ export type ParentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   phone?: boolean
   address?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  userId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   students?: boolean | Prisma.Parent$studentsArgs<ExtArgs>
   _count?: boolean | Prisma.ParentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parent"]>
@@ -510,6 +672,9 @@ export type ParentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   address?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  userId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parent"]>
 
 export type ParentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -521,6 +686,9 @@ export type ParentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   address?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  userId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parent"]>
 
 export type ParentSelectScalar = {
@@ -532,19 +700,27 @@ export type ParentSelectScalar = {
   phone?: boolean
   address?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  userId?: boolean
 }
 
-export type ParentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "name" | "surname" | "email" | "phone" | "address" | "createdAt", ExtArgs["result"]["parent"]>
+export type ParentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "name" | "surname" | "email" | "phone" | "address" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["parent"]>
 export type ParentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   students?: boolean | Prisma.Parent$studentsArgs<ExtArgs>
   _count?: boolean | Prisma.ParentCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ParentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ParentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ParentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type ParentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $ParentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Parent"
   objects: {
+    user: Prisma.$UserPayload<ExtArgs>
     students: Prisma.$StudentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -556,6 +732,8 @@ export type $ParentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     phone: string
     address: string
     createdAt: Date
+    updatedAt: Date
+    userId: string
   }, ExtArgs["result"]["parent"]>
   composites: {}
 }
@@ -950,6 +1128,7 @@ readonly fields: ParentFieldRefs;
  */
 export interface Prisma__ParentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   students<T extends Prisma.Parent$studentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Parent$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -988,6 +1167,8 @@ export interface ParentFieldRefs {
   readonly phone: Prisma.FieldRef<"Parent", 'String'>
   readonly address: Prisma.FieldRef<"Parent", 'String'>
   readonly createdAt: Prisma.FieldRef<"Parent", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Parent", 'DateTime'>
+  readonly userId: Prisma.FieldRef<"Parent", 'String'>
 }
     
 
@@ -1237,6 +1418,10 @@ export type ParentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.ParentCreateManyInput | Prisma.ParentCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParentIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1307,6 +1492,10 @@ export type ParentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Parents to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ParentIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

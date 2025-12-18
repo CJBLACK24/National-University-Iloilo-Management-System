@@ -93,7 +93,10 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const AdminScalarFieldEnum = {
   id: 'id',
-  username: 'username'
+  username: 'username',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
@@ -111,6 +114,8 @@ export const StudentScalarFieldEnum = {
   bloodType: 'bloodType',
   sex: 'sex',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
   parentId: 'parentId',
   classId: 'classId',
   gradeId: 'gradeId',
@@ -132,6 +137,8 @@ export const TeacherScalarFieldEnum = {
   bloodType: 'bloodType',
   sex: 'sex',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
   birthday: 'birthday'
 } as const
 
@@ -146,7 +153,9 @@ export const ParentScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
 } as const
 
 export type ParentScalarFieldEnum = (typeof ParentScalarFieldEnum)[keyof typeof ParentScalarFieldEnum]
@@ -164,8 +173,11 @@ export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
   capacity: 'capacity',
+  currentEnrollment: 'currentEnrollment',
   supervisorId: 'supervisorId',
-  gradeId: 'gradeId'
+  gradeId: 'gradeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]

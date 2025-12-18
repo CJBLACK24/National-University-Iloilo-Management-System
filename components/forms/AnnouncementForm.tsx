@@ -9,7 +9,11 @@ import {
   announcementSchema,
   AnnouncementSchema,
 } from "@/lib/formValidationSchemas";
-import { createAnnouncement, updateAnnouncement } from "@/lib/actions";
+import {
+  createAnnouncement,
+  updateAnnouncement,
+  CurrentState,
+} from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -33,11 +37,12 @@ const AnnouncementForm = ({
     resolver: zodResolver(announcementSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createAnnouncement : updateAnnouncement,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -118,7 +123,9 @@ const AnnouncementForm = ({
         </SelectField>
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}

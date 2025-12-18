@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { parentSchema, ParentSchema } from "@/lib/formValidationSchemas";
-import { createParent, updateParent } from "@/lib/actions";
+import { createParent, updateParent, CurrentState } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect, useActionState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -27,11 +27,12 @@ const ParentForm = ({
     resolver: zodResolver(parentSchema) as any,
   });
 
-  const [state, formAction] = useActionState(
+  const [state, formAction] = useActionState<CurrentState, any>(
     type === "create" ? createParent : updateParent,
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -130,7 +131,9 @@ const ParentForm = ({
         )}
       </div>
       {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
+        <span className="text-red-500">
+          {state.message || "Something went wrong!"}
+        </span>
       )}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Create" : "Update"}
